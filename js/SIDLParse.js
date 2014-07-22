@@ -23,18 +23,6 @@ function ParseSIDL() {
 			} else {
 				console.log("Schema should read: '<Schema xmlns=\"EverQuestData\" xmlns:dt=\"EverQuestDataTypes\" />'");
 			}
-			sidl["int"] = {};
-			sidl["int"].type = "int";
-			sidl["int"].default = 0;
-			sidl["int"].value = 0;
-			sidl["string"] = {};
-			sidl["string"].type = "string";
-			sidl["string"].default = "";
-			sidl["string"].value = "";
-			sidl["boolean"] = {};
-			sidl["boolean"].type = "boolean";
-			sidl["boolean"].default = false;
-			sidl["boolean"].value = false;
 			n = getChildElementNode(schema);
 			while (n != null) {
 				elementType = n.attributes.item(0).nodeValue
@@ -65,10 +53,18 @@ function ParseSIDL() {
 						sidl[elementType][attributeName].array = false;
 						if (sidl[attributeType] != null) {
 							sidl[elementType][attributeName].value = sidl[attributeType];
+						} else if (attributeType == "int") {
+							sidl[elementType][attributeName] = { type: "int", default: 0, value: 0 };
+						}  else if (attributeType == "string") {
+							sidl[elementType][attributeName] = { type: "string", default: "", value: "" };
+						}  else if (attributeType == "boolean") {
+							sidl[elementType][attributeName] = { type: "boolean", default: false, value: false };
+						} else {
+							sidl[elementType][attributeName] = {};
 						}
 						if (child.childNodes.length > 0) {
 							var defaultChild = getChildElementNode(child);
-							sidl[elementType][attributeName].value.default = defaultChild.firstChild.data;
+							sidl[elementType][attributeName].default = defaultChild.firstChild.data;
 						}
 					}
 					child = getSiblingElementNode(child);
