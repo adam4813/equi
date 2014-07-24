@@ -4,9 +4,9 @@ editors["Point"] = function (name, target) {
 	var x = target.value["X"].value;
 	var y = target.value["Y"].value;
 
-	var editform = "<div>X: <span id='x'>" + x.value + "</span>" +
+	var editform = "<div>X: <span id='x'>" + x + "</span>" +
 		"<input id='editx' type='number' min='0' max='255' style='display: none;' /><br />" +
-		"Y: <span id='y'>" + y.value + "</span>" +
+		"Y: <span id='y'>" + y + "</span>" +
 		"<input id='edity' type='number' min='0' max='255' style='display: none;' />";
 
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
@@ -23,8 +23,8 @@ editors["Point"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value["X"].value.value = $(this).find("#x").text();
-				target.value["Y"].value.value = $(this).find("#y").text();
+				target.value["X"].value = $(this).find("#x").text();
+				target.value["Y"].value = $(this).find("#y").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -39,9 +39,9 @@ editors["Size"] = function (name, target) {
 	var x = target.value["CX"].value;
 	var y = target.value["CY"].value;
 
-	var editform = "<div>X: <span id='x'>" + x.value + "</span>" +
+	var editform = "<div>X: <span id='x'>" + x + "</span>" +
 		"<input id='editx' type='number' min='0' max='255' style='display: none;' /><br />" +
-		"Y: <span id='y'>" + y.value + "</span>" +
+		"Y: <span id='y'>" + y + "</span>" +
 		"<input id='edity' type='number' min='0' max='255' style='display: none;' />";
 
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
@@ -58,8 +58,8 @@ editors["Size"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value["CX"].value.value = $(this).find("#x").text();
-				target.value["CY"].value.value = $(this).find("#y").text();
+				target.value["CX"].value = $(this).find("#x").text();
+				target.value["CY"].value = $(this).find("#y").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -71,27 +71,27 @@ editors["Size"] = function (name, target) {
 }
 
 editors["string"] = function (name, target) {
-	if (target.value.value) {
-		var str = target.value.value;
-	} else {
-		var str = target.value;
-	}
-
-	var editform = "<div id='strform'>" + name + ": <span id='str'>" + str + "</span>" +
-		"<input id='editstr' type='text' style='display: none;' /><br /></div>";
+	var str = target.value;
 
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
-	div.append($.parseHTML(editform));
 
-	$(div).find("#editstr").focusout(function () { $(this).hide(); $(this).siblings("#str").show().text($(this).val()); });
-	$(div).find("#strform").click(function () { $(this).find("#str").hide(); $(this).find("#editstr").show().val($(this).find("#str").text()).focus(); });
+	var form = "<div id='strform'><span id='strlabel'>" + name + ": <span id='str'>" + str + "</span></span><input id='stredit' type='text' style='display: none;' /><br /></div>";
+	$(div).append($.parseHTML(form));
+
+	$(div).find("#stredit").focusout(function (property) {
+		$(this).hide(); $(this).parent().find("#str").show().text($(this).val());
+	});
+	$(div).find("#strlabel").click({ property: property }, function (property) {
+		$(this).find("#str").hide();
+		$(this).siblings("#stredit").show().val($(this).find("#str").text()).focus();
+	});
 
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value.value = $(this).find("#str").text();
+				target.value = $(this).find("#str").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -108,13 +108,13 @@ editors["RGB"] = function (name, target) {
 	var b = target.value["B"].value;
 	var alpha = target.value["Alpha"].value;
 
-	var editform = "<div>Alpha: <span id='alpha'>" + alpha.value + "</span>" +
+	var editform = "<div>Alpha: <span id='alpha'>" + alpha + "</span>" +
 		"<input id='editalpha' type='number' min='0' max='255' style='display: none;' /><br />" +
-		"R: <span id='r'>" + r.value + "</span>" +
+		"R: <span id='r'>" + r + "</span>" +
 		"<input id='editr' type='number' min='0' max='255' style='display: none;' /><br />" +
-		"G: <span id='g'>" + g.value + "</span>" +
+		"G: <span id='g'>" + g + "</span>" +
 		"<input id='editg' type='number' min='0' max='255' style='display: none;' /><br />" +
-		"B: <span id='b'>" + b.value + "</span>" +
+		"B: <span id='b'>" + b + "</span>" +
 		"<input id='editb' type='number' min='0' max='255' style='display: none;' />";
 
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
@@ -137,10 +137,10 @@ editors["RGB"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value["Alpha"].value.value = $(this).find("#alpha").text();
-				target.value["R"].value.value = $(this).find("#r").text();
-				target.value["G"].value.value = $(this).find("#g").text();
-				target.value["B"].value.value = $(this).find("#B").text();
+				target.value["Alpha"].value = $(this).find("#alpha").text();
+				target.value["R"].value = $(this).find("#r").text();
+				target.value["G"].value = $(this).find("#g").text();
+				target.value["B"].value = $(this).find("#b").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -152,7 +152,7 @@ editors["RGB"] = function (name, target) {
 }
 
 editors["int"] = function (name, target) {
-	var str = target.value.value;
+	var str = target.value;
 
 	var editform = "<div id='intform'>" + name + ": <span id='int'>" + str + "</span>" +
 		"<input id='editint' type='text' style='display: none;' /></div>";
@@ -168,7 +168,7 @@ editors["int"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value.value = $(this).find("#int").text();
+				target.value = $(this).find("#int").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -180,10 +180,10 @@ editors["int"] = function (name, target) {
 }
 
 editors["boolean"] = function (name, target) {
-	var str = target.value.value;
+	var str = target.value;
 
 	var editform = "<div>" + name + "<input id='editbool' type='checkbox' " + 
-	 ((target.value.value == true) ? "checked" : "") + "/></div>";
+	 ((target.value == true) ? "checked" : "") + "/></div>";
 
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
 	div.append($.parseHTML(editform));
@@ -193,7 +193,7 @@ editors["boolean"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value.value = $(this).find("#editbool").prop("checked");
+				target.value = $(this).find("#editbool").prop("checked");
 				$(this).dialog("close");
 			},
 			Cancel: function () {
@@ -205,53 +205,51 @@ editors["boolean"] = function (name, target) {
 }
 
 editors["Frame"] = function (name, target) {
-	var frames = target.value;
-	for (frame in frames) {
-		var texture = frames[frame]["Texture"];
-		var location = frames[frame]["Location"];
-		var size = frames[frame]["Size"];
-		var hotspot = frames[frame]["Hotspot"];
-		var duration = frames[frame]["Duration"];
-		var shading = frames[frame]["Shading"];
-		var specular = frames[frame]["Specular"];
-	}
-
 	// Add a select to choose the element to view.
 	var frameselector = $(document.createElement("div")).attr("id", "frameselector")
 		.append($(document.createElement("select")));
 
 	// Populate the list
 	var select = $(frameselector).find("select");
-	for (var frame in frames) {
+	for (var frame in target.value) {
 		$(select).append($(document.createElement("option")).val(frame).text(frame));
 	}
 
-	var textureform = "<div id='textureform'>Texture: <span id='texture'>" + target.value[0]["Texture"].value + "</span>" +
-		"<input id='edittexture' type='text' style='display: none;' /><br /></div>";
-
-	var texturediv = $(document.createElement("div")).attr("id", "texture_editor");
-	texturediv.append($.parseHTML(textureform));
-
-	$(texturediv).find("#edittexture").focusout(function () { $(this).hide(); $(this).siblings("#texture").show().text($(this).val()); });
-	$(texturediv).find("#textureform").click(function () { $(this).find("#texture").hide(); $(this).find("#edittexture").show().val($(this).find("#texture").text()).focus(); });
-
 	var div = $(document.createElement("div")).attr("id", name + "_editor");
-	div.append(frameselector).append(texturediv);
+	$(div).append(frameselector);
 
 	var currentframe = 0;
+
+	for (var property in target.value[currentframe]) {
+		var form = "<div id='" + property + "form'><span id='" + property + "label'>" + property +
+			": <span id='" + property + "'/></span><input id='edit" + property + "' type='text' style='display: none;' /><br /></div>";
+		$(div).append($.parseHTML(form));
+
+		$(div).find("#edit" + property).focusout({ property: property }, function (property) {
+			$(this).hide(); $(this).parent().find("#" + property.data.property).show().text($(this).val());
+		});
+		$(div).find("#" + property + "label").click({ property: property }, function (property) {
+			$(this).find("#" + property.data.property).hide();
+			$(this).siblings("#edit" + property.data.property).show().val($(this).find("#" + property.data.property).text()).focus();
+		});
+	}
 
 	$(div).find("#frameselector").change(
 		function () {
 			currentframe = $(div).find("#frameselector > select option:selected").val()
-			$(div).find("#textureform > #texture").text(target.value[currentframe]["Texture"].value);
+			for (var property in target.value[currentframe]) {
+				$(div).find("#" + property).text(target.value[currentframe][property].value);
+			}
 		});
+	
+	$(div).find("#frameselector").change();
 
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
 		buttons: {
 			Ok: function () {
-				target.value[currentframe]["Texture"].value = $(this).find("#texture").text();
+				target.value[currentframe]["Texture"].value = $(this).find("#Texture").text();
 				$(this).dialog("close");
 			},
 			Cancel: function () {

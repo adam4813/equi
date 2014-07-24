@@ -74,6 +74,7 @@ function parseThree(node, parent) {
 	for (var i = 0; i < node.childNodes.length; i++) {
 		if (node.childNodes[i].nodeType == 1) {
 			var sidlNode = sidl[name][node.childNodes[i].nodeName];
+
 			if (!sidlNode) {
 				continue;
 			}
@@ -88,7 +89,7 @@ function parseThree(node, parent) {
 				}
 				else {
 					$.extend(true, temp, sidlNode);
-					parsers[type](node.childNodes[i], temp.value);
+					parsers[type](node.childNodes[i], temp);
 				}
 			}
 			else {
