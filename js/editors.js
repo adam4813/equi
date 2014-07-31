@@ -305,18 +305,18 @@ editors["Frame"] = function (name, target) {
 		modal: true,
 		buttons: {
 			Ok: function () {
-				for (var property in target.value[currentframe].elements) {
-					switch (target.value[currentframe].elements[property].type) {
+				for (var property in target.valueHolder[currentframe].elements) {
+					switch (target.valueHolder[currentframe].elements[property].type) {
 						case "string":
 						case "int":
-							target.value[currentframe].elements[property].valueHolder.value = $(this).find("#" + property).text();
+							target.valueHolder[currentframe].elements[property].valueHolder.value = $(this).find("#" + property).text();
 							break;
 						case "boolean":
-							target.value[currentframe].elements[property].valueHolder.value = prop("checked") == true;
+							target.valueHolder[currentframe].elements[property].valueHolder.value = prop("checked") == true;
 							break;
 						default:
-							for (value in target.value[currentframe].elements[property].value.elements) {
-								target.value[currentframe].elements[property].value.elements[value].valueHolder.value = $(this).find("#" + property + "-" + value).text();
+							for (value in target.valueHolder[currentframe].elements[property].valueHolder.elements) {
+								target.valueHolder[currentframe].elements[property].valueHolder.elements[value].valueHolder.value = $(this).find("#" + property + "-" + value).text();
 							}
 					}
 				}
