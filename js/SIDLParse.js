@@ -8,7 +8,7 @@ function ParseSIDL() {
 				console.log("Can't find XML root node.");
 				return;
 			}
-			if (root.attributes.item(0).nodeValue == "EQInterfaceDefinitionLanguage") {
+			if (root.attributes.item(0).value == "EQInterfaceDefinitionLanguage") {
 				console.log("Valid XML ID.");
 			} else {
 				console.log("XML ID should read: '<XML ID=\"EQInterfaceDefinitionLanguage\">'");
@@ -18,60 +18,76 @@ function ParseSIDL() {
 				console.log("Can't find Schema node.");
 				return;
 			}
-			if ((schema.attributes.item(0).nodeValue == "EverQuestData") && (schema.attributes.item(1).nodeValue == "EverQuestDataTypes" )) {
+			if ((schema.attributes.item(0).value == "EverQuestData") && (schema.attributes.item(1).value == "EverQuestDataTypes")) {
 				console.log("Valid Schema.");
 			} else {
 				console.log("Schema should read: '<Schema xmlns=\"EverQuestData\" xmlns:dt=\"EverQuestDataTypes\" />'");
 			}
-			n = getChildElementNode(schema);
-			while (n != null) {
-				elementType = n.attributes.item(0).nodeValue
-				sidl[elementType] = {};
-				var child = getChildElementNode(n);
+
+			sidl["int"] =
+				{ type: "int", default: 0, isItem: false, isArray: false, value: 0 };
+			sidl["string"] =
+				{ type: "string", default: "", isItem: false, isArray: false, value: "" };
+			sidl["boolean"] =
+				{ type: "boolean", default: false, isItem: false, isArray: false, value: false };
+
+			var rootElement = getChildElementNode(schema); // Get the first top level ElementType.
+			while (rootElement != null) {
+				elementType = rootElement.attributes.item(0).value; // Name of the top level ElementType.
+				sidl[elementType] = {}; // Make a new object with the name of this top level ElementType.
+
+				var child = getChildElementNode(rootElement); // Get the first element of this top level ElementType.
 				while (child != null) {
+					// Check if there is a superType to extend first.
 					if (child.nodeName == "superType") {
-						var superType = child.attributes.item(0).nodeValue;
-						sidl[elementType] = sidl[superType];
+						var superType = child.attributes.item(0).value;
 						sidl[elementType] = $.extend(true, {}, sidl[superType]);
-						child = getSiblingElementNode(child);
-						continue;
 					}
-					var attributeName = child.attributes.item(0).nodeValue;
-					var attributeType = child.attributes.item(1).nodeValue;
-					sidl[elementType][attributeName] = {};
-					if (attributeType.search(":item") > -1) {
-						sidl[elementType][attributeName].item = true;
-					} else {
-						sidl[elementType][attributeName].item = false;
-					}
-					attributeType = attributeType.split(":")[0];
-					sidl[elementType][attributeName].type = attributeType;
-					if (child.attributes.item(2) != null) {
-						sidl[elementType][attributeName].array = true;
-						sidl[elementType][attributeName].value = [];
-					} else {
-						sidl[elementType][attributeName].array = false;
-						if (sidl[attributeType] != null) {
-							sidl[elementType][attributeName].value = sidl[attributeType];
-						} else if (attributeType == "int") {
-							sidl[elementType][attributeName] = { type: "int", default: 0, value: 0 };
-						}  else if (attributeType == "string") {
-							sidl[elementType][attributeName] = { type: "string", default: "", value: "" };
-						}  else if (attributeType == "boolean") {
-							sidl[elementType][attributeName] = { type: "boolean", default: false, value: false };
-						} else {
-							sidl[elementType][attributeName] = {};
+
+					if (child.nodeName == "element") {
+						var subElementName = child.attributes.item(0).value;
+						var subElementType = child.attributes.item(1).value;
+
+						var itemType = false;
+						if (subElementType.search(":item") > -1) {
+							itemType = true;
+							subElementType = subElementType.split(":")[0];
 						}
+
+						var arrayType = false;
+						if (child.attributes.length > 2) {
+							arrayType = true;
+						}
+
+						var defaultValue = "";
 						if (child.childNodes.length > 0) {
-							var defaultChild = getChildElementNode(child);
-							sidl[elementType][attributeName].default = defaultChild.firstChild.data;
+							defaultValue = getChildElementNode(child).firstChild.data;
+						}
+
+						// If this is the first sub element there isn't an elements member yet.
+						if (!sidl[elementType].elements) {
+							sidl[elementType].elements = {};
+						}
+						sidl[elementType].elements[subElementName] =
+							{ type: subElementType, default: defaultValue, isItem: itemType, isArray: arrayType };
+						if (sidl[subElementType] && !arrayType) {
+							sidl[elementType].elements[subElementName].valueHolder = $.extend(true, {}, sidl[subElementType]);
+							// This is a POD so set its default value accordingly.
+							if (sidl[elementType].elements[subElementName].valueHolder.value!=  null) {
+								sidl[elementType].elements[subElementName].valueHolder.value = defaultValue;
+							}
+						} else if (arrayType) {
+							sidl[elementType].elements[subElementName].valueHolder = [];
+						} else {
+							sidl[elementType].elements[subElementName].valueHolder = defaultValue;
 						}
 					}
-					child = getSiblingElementNode(child);
+					child = getSiblingElementNode(child); // Get the next element of the top level ElementType.
 				}
-				n = getSiblingElementNode(n);
+
+				rootElement = getSiblingElementNode(rootElement); // Get the next top level ElementType.
 			}
 		}
 	);
-	$.ajaxSetup({async:true});
+	$.ajaxSetup({ async: true });
 }
