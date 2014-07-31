@@ -329,3 +329,36 @@ editors["Frame"] = function (name, target) {
 	});
 	$(div).dialog("open");
 }
+
+editors["Template"] = function (name, target, type) {
+	var div = $(document.createElement("div")).attr("id", name + "_editor");
+	for (property in target.valueHolder.elements) {
+			var form = "<div id='" + property + "form'><span id='" + property + "label'>" + property +
+				": <span id='" + property + "'>" + target.valueHolder.elements[property].valueHolder.value + "</span></span><input id='edit" + property + "' type='text' style='display: none;' /></div>";
+			$(div).append($.parseHTML(form));
+			$(div).find("#edit" + property).focusout({ property: property }, function (property) {
+				$(this).hide(); $(this).parent().find("#" + property.data.property).show().text($(this).val());
+			});
+			$(div).find("#" + property + "label").click({ property: property }, function (property) {
+				$(this).find("#" + property.data.property).hide();
+				$(this).siblings("#edit" + property.data.property).show().val($(this).find("#" + property.data.property).text()).focus();
+			});
+	}
+
+	$(div).dialog({
+		autoOpen: false,
+		modal: true,
+		buttons: {
+			Ok: function () {
+				for (var property in target.valueHolder.elements) {
+					target.valueHolder.elements[property].valueHolder.value = $(this).find("#" + property).text();
+				}
+				$(this).dialog("close");
+			},
+			Cancel: function () {
+				$(this).dialog("close");
+			}
+		},
+	});
+	$(div).dialog("open");
+}

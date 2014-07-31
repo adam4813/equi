@@ -70,7 +70,7 @@ function ParseSIDL() {
 						}
 						sidl[elementType].elements[subElementName] =
 							{ type: subElementType, default: defaultValue, isItem: itemType, isArray: arrayType };
-						if (sidl[subElementType] && !arrayType) {
+						if (sidl[subElementType] && !arrayType && !itemType) {
 							sidl[elementType].elements[subElementName].valueHolder = $.extend(true, {}, sidl[subElementType]);
 							// This is a POD so set its default value accordingly.
 							if (sidl[elementType].elements[subElementName].valueHolder.value!=  null) {
@@ -78,7 +78,9 @@ function ParseSIDL() {
 							}
 						} else if (arrayType) {
 							sidl[elementType].elements[subElementName].valueHolder = [];
-						} else {
+						} else if (itemType) {
+							sidl[elementType].elements[subElementName].valueHolder = $.extend(true, {}, sidl["string"]);
+						}else {
 							sidl[elementType].elements[subElementName].valueHolder = defaultValue;
 						}
 					}

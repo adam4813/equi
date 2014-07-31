@@ -56,7 +56,7 @@ parsers["Template"] = function ParseFrame(node, target, type) {
 	for (property in target.elements) {
 		nodes = node.getElementsByTagName(property);
 		if (nodes.length > 0) {
-			parsers["string"](nodes[0], target.elements[property]);
+			parsers["string"](nodes[0], target.elements[property].valueHolder);
 		}
 	}
 }

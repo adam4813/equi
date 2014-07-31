@@ -59,7 +59,11 @@ function showElementProperties(item) {
 	for (var key in items[item].elements) {
 		var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
 			function (data) {
-				if (editors[data.data.value.type]) {
+				if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
+					editors["Template"](data.data.key, data.data.value, data.data.value.type);
+				} else if ((data.data.value.isItem)) {
+					editors["string"](data.data.key, data.data.value);
+				} else if (editors[data.data.value.type]) {
 					editors[data.data.value.type](data.data.key, data.data.value);
 				}
 			});
@@ -82,15 +86,16 @@ function parseNode(node, parent) {
 
 			var temp = {};
 
-			if (type.search("Template") > -1) {
+			if ((type.search("Template") > -1) && (!sidlNode.isItem)) {
 				$.extend(true, temp, sidl[type]);
 				parsers["Template"](node.childNodes[i], temp, type);
-			}
-			else if (parsers[type] != null) {
+			} else if (sidlNode.isItem) {
+				$.extend(true, temp, sidl["string"]);
+				parsers["string"](node.childNodes[i], temp);
+			} else if (parsers[type] != null) {
 				$.extend(true, temp, sidl[type]);
 				parsers[type](node.childNodes[i], temp);
-			}
-			else {
+			} else {
 				// This node is a container type. Set its type from the SIDL,
 				// and recurse to parse the child nodes.
 				$.extend(true, temp, sidl[name]);
