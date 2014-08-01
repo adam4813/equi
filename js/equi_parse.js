@@ -61,8 +61,10 @@ function showElementProperties(item) {
 			function (data) {
 				if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
 					editors["Template"](data.data.key, data.data.value, data.data.value.type);
-				} else if ((data.data.value.isItem)) {
+				} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
 					editors["string"](data.data.key, data.data.value);
+				} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
+					editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
 				} else if (editors[data.data.value.type]) {
 					editors[data.data.value.type](data.data.key, data.data.value);
 				}

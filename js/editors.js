@@ -21,6 +21,7 @@ editors["Point"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.elements["X"].valueHolder.value = $(this).find("#x").text();
@@ -56,6 +57,7 @@ editors["Size"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.elements["CX"].valueHolder.value = $(this).find("#x").text();
@@ -92,6 +94,7 @@ editors["string"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.value = $(this).find("#str").text();
@@ -138,6 +141,7 @@ editors["RGB"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.elements["Alpha"].valueHolder.value = $(this).find("#alpha").text();
@@ -172,6 +176,7 @@ editors["int"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.value = $(this).find("#int").text();
@@ -200,6 +205,7 @@ editors["boolean"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				target.valueHolder.value = $(this).find("#editbool").prop("checked");
@@ -303,6 +309,7 @@ editors["Frame"] = function (name, target) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				for (var property in target.valueHolder[currentframe].elements) {
@@ -348,6 +355,33 @@ editors["Template"] = function (name, target, type) {
 	$(div).dialog({
 		autoOpen: false,
 		modal: true,
+		width: "auto",
+		buttons: {
+			Ok: function () {
+				for (var property in target.valueHolder.elements) {
+					target.valueHolder.elements[property].valueHolder.value = $(this).find("#" + property).text();
+				}
+				$(this).dialog("close");
+			},
+			Cancel: function () {
+				$(this).dialog("close");
+			}
+		},
+	});
+	$(div).dialog("open");
+}
+
+editors["itemArray"] = function (name, target, type) {
+	var div = $(document.createElement("div")).attr("id", name + "_editor");
+	$(div).append($.parseHTML("<select id='itemSelect' multiple/>"));
+	for (item in target.valueHolder) {
+		$(div).find("#itemSelect").append($('<option></option>').val(item).html(target.valueHolder[item].value));
+	}
+
+	$(div).dialog({
+		autoOpen: false,
+		modal: true,
+		width: "auto",
 		buttons: {
 			Ok: function () {
 				for (var property in target.valueHolder.elements) {
