@@ -56,23 +56,30 @@ function populateElementList() {
 
 function showElementProperties(item) {
 	var proplist = document.getElementById("elementProperties");
+	$(document.getElementById("renderView")).empty();
 	$(proplist).empty();
-	for (var key in items[item].elements) {
-		var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
-			function (data) {
-				if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
-					editors["Template"](data.data.key, data.data.value, data.data.value.type);
-				} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
-					editors["string"](data.data.key, data.data.value);
-				} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
-					editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
-				} else if (editors[data.data.value.type]) {
-					editors[data.data.value.type](data.data.key, data.data.value);
-				}
-			});
-		$(div).text(key).append($(document.createElement("br")));
+	if (items[item].type == "Button") {
+		renderers["Button"](items[item], "#renderView");
+	} else if (items[item].type == "Label") {
+		renderers["Button"](items[item], "#renderView");
+	} else {
+		for (var key in items[item].elements) {
+			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
+				function (data) {
+					if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
+						editors["Template"](data.data.key, data.data.value, data.data.value.type);
+					} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
+						editors["string"](data.data.key, data.data.value);
+					} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
+						editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
+					} else if (editors[data.data.value.type]) {
+						editors[data.data.value.type](data.data.key, data.data.value);
+					}
+				});
+			$(div).text(key).append($(document.createElement("br")));
 
-		$("#elementProperties").append($(div));
+			$("#elementProperties").append($(div));
+		}
 	}
 }
 
