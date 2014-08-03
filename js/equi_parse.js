@@ -33,6 +33,7 @@ $(function() {
 					current = next;
 					next = getSiblingElementNode(next);
 					items[current.attributes.item(0).value] = $.extend(true, {}, sidl[current.nodeName]);
+					items[current.attributes.item(0).value].type = current.nodeName;
 					parseNode(current, items[current.attributes.item(0).value]);
 				}
 				
