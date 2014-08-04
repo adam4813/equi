@@ -1,6 +1,11 @@
-renderers = {};
+viewers = {};
 
-renderers["Frame"] = function (item, location) {
+/* TODO:
+|- Hotspot
+|- Shading
+|- Specular
+*/
+viewers["Frame"] = function (item, location) {
 	var img = $.parseHTML("<img src='img/" + item.elements["Texture"].valueHolder.value + "'/>");
 	var loc = item.elements["Location"].valueHolder;
 	var size = item.elements["Size"].valueHolder;
@@ -19,9 +24,115 @@ renderers["Frame"] = function (item, location) {
 		"user-select": "none"
 	});
 	$(location).append(img);
+	$(location).width(parseInt(size.elements["CX"].valueHolder.value)).height(parseInt(size.elements["CY"].valueHolder.value));
 };
 
-renderers["Button"] = function (item, location) {
+/* TODO:
+|- Grid
+|- Vertical
+|- CellWidth
+|- CellHeight
+*/
+viewers["Ui2DAnimation"] = function (item, location) {
+	var currentFrame = 0;
+	var run = setInterval(animate, item.elements["Frames"].valueHolder[currentFrame].elements["Duration"].valueHolder.value);
+	var div = $.parseHTML("<div/>");
+
+	for (frame in item.elements["Frames"].valueHolder) {
+		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
+	}
+
+	$(location).append(div);
+
+	$(div).children().not(":eq(0)").hide();
+
+	function animate() {
+		clearInterval(run);
+		// This animation is no longer in the DOM so remove the interval.
+		if ($(div).parents().filter("body").length == 0) {
+			return;
+		}
+		currentFrame++;
+		if (currentFrame >= item.elements["Frames"].valueHolder.length) {
+			if (item.elements["Cycle"].valueHolder.value == true) {
+				currentFrame = 0;
+			} else {
+				// Cycle is false so just loop through once.
+				return;
+			}
+		}
+		var frame = item.elements["Frames"].valueHolder[currentFrame];
+
+		$(div).children().filter("img").eq(currentFrame - 1).hide();
+		$(div).children().filter("img").eq(currentFrame).show();
+		run = setInterval(animate, frame.elements["Duration"].valueHolder.value);
+	};
+}
+
+/* TODO:
+|- Disabled
+|- PressedFlyby
+|- PressedDisabled
+|- *Decal (Behavior)
+*/
+viewers["ButtonDrawTemplate"] = function (item, location) {
+	for (element in item.elements) {
+		if (items[item.elements[element].valueHolder.value]) {
+			var frame = items[item.elements[element].valueHolder.value];
+			var frameDiv = $.parseHTML("<div id='" + element + "'/>");
+			viewers["Ui2DAnimation"](frame, frameDiv);
+			$(frameDiv).hide();
+			$(location).append(frameDiv);
+		}
+	}
+
+	$(location).mousedown(function () {
+		if ($(this).find("#Pressed").length > 0) {
+			$(this).find("#Pressed").show();
+			$(this).find("#Normal").hide();
+		}
+		$(this).find("#Flyby").hide();
+	}).mouseup(function () {
+		// We must reference Checkbox_State to ensure proper bevaior (set in Button).
+		if (location["Checkbox_State"] == true) { return; }
+		$(this).find("#Pressed").hide();
+		$(this).find("#Normal").show();
+		$(this).mouseenter();
+	}).mouseenter(function () {
+		if (($(this).find("#Pressed").length > 0) ? ($(this).find("#Pressed").css("display") == "none") : true) {
+			$(this).find("#Flyby").show();
+		}
+	}).mouseleave(function () {
+		if ($(this).find("#Flyby").css("display") != "none") {
+			$(this).find("#Flyby").hide();
+		}
+	});
+	$(location).mouseup();
+	$(location).mouseleave();
+}
+
+/* TODO:
+Control
+|- Style_VScroll
+|- Style_HScroll
+|- Style_AutoVScroll
+|- Style_AutoHScroll
+|- Style_Transparent
+|- Style_TransparentControl
+|- Style_Border
+|- Style_Tooltip
+|- EQType
+|- DrawTemplate
+|- Layout
+Button
+|- UseCustomDisabledColor
+|- RadioGroup
+|- Template
+|- SoundPressed
+|- SoundUp
+|- SoundFlyby
+*/
+viewers["Button"] = function (item, location) {
 	var div = $.parseHTML("<div/>");
 	$(div).css({ "position": "absolute" });
 
@@ -36,83 +147,37 @@ renderers["Button"] = function (item, location) {
 		"top": item.elements["TextOffsetY"].valueHolder.value,
 		"text-align": (item.elements["TextAlignCenter"].valueHolder.value) == "true" ? "center" : "left",
 		"text-align": (item.elements["TextAlignRight"].valueHolder.value) == "true" ? "right" : "left",
-		"vertical-align": (item.elements["TextAlignVCenter"].valueHolder.value) ? "middle" : "initial"
+		"vertical-align": (item.elements["TextAlignVCenter"].valueHolder.value == "true") ? "middle" : "initial"
 	});
-	$(textDiv).attr("alt", (item.elements["TooltipReference"].valueHolder.value));
-	$(div).append(textDiv);
+	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
-	var butDrawTemplate = item.elements["ButtonDrawTemplate"].valueHolder;
+	if (item.elements["Style_Checkbox"].valueHolder.value == true) {
+		textDiv["Checkbox_State"] = false;
+	}
 
-	// TODO: Handle ButtonDrawTemplate items more elegantly.
-	// TODO: Handle ButtonDrawTemplate item references.
-	// Normal Button Image.
-	if (items[butDrawTemplate.elements["Normal"].valueHolder.value]) {
-		var normalFrame = items[butDrawTemplate.elements["Normal"].valueHolder.value].elements["Frames"].valueHolder[0];
-		normalDiv = $.parseHTML("<div id='Normal'/>");
-		renderers["Frame"](normalFrame, normalDiv);
-		var normalOffset = $(normalDiv).offset();
+	viewers["ButtonDrawTemplate"](item.elements["ButtonDrawTemplate"].valueHolder, textDiv);
+
+	// Apply Decal properties to any Decal children.
+	decalElements = $(textDiv).find("[id$=Decal]");
+	for (var i = 0; i < decalElements.length; i++) {
+		var normalOffset = $(decalElements[i]).offset();
 		normalOffset.top += parseInt(normalOffset.top) + parseInt(item.elements["DecalOffset"].valueHolder.elements["Y"].valueHolder.value),
 		normalOffset.left += parseInt(normalOffset.left) + parseInt(item.elements["DecalOffset"].valueHolder.elements["X"].valueHolder.value),
-		$(normalDiv).offset(normalOffset).css("position", "absolute");
+		$(decalElements[i]).offset(normalOffset).css("position", "absolute");
 		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value) > 0) {
-			$(normalDiv).offset(normalOffset).css("overflow", "hidden");
-			$(normalDiv).width(parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
+			$(decalElements[i]).offset(normalOffset).css("overflow", "hidden");
+			$(decalElements[i]).width(parseInt(item.elements["DecalSize"]["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
 		}
 		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value) > 0) {
-			$(normalDiv).offset(normalOffset).css("overflow", "hidden");
-			$(normalDiv).height(parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value));
+			$(decalElements[i]).offset(normalOffset).css("overflow", "hidden");
+			$(decalElements[i]).height(parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value));
 		}
-		$(div).append(normalDiv);
 	}
 
-	// Pressed Button Image.
-	if (items[butDrawTemplate.elements["Pressed"].valueHolder.value]) {
-		var pressedFrame = items[butDrawTemplate.elements["Pressed"].valueHolder.value].elements["Frames"].valueHolder[0];
-		pressedDiv = $.parseHTML("<div id='Pressed'/>");
-		renderers["Frame"](pressedFrame, pressedDiv);
-		$(pressedDiv).hide(); // Hidden by default.
-		var pressedOffset = $(pressedDiv).offset();
-		pressedOffset.top += parseInt(pressedOffset.top) + parseInt(item.elements["DecalOffset"].valueHolder.elements["Y"].valueHolder.value),
-		pressedOffset.left += parseInt(pressedOffset.left) + parseInt(item.elements["DecalOffset"].valueHolder.elements["X"].valueHolder.value),
-		$(pressedDiv).offset(pressedOffset).css("position", "absolute");
-		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value) > 0) {
-			$(pressedDiv).offset(normalOffset).css("overflow", "hidden");
-			$(pressedDiv).width(parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
-		}
-		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value) > 0) {
-			$(pressedDiv).offset(normalOffset).css("overflow", "hidden");
-			$(pressedDiv).height(parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value));
-		}
-		$(div).append(pressedDiv);
-	}
+	$(div).append(textDiv);
 
-	// Flyby Button Image.
-	if (items[butDrawTemplate.elements["Flyby"].valueHolder.value]) {
-		var flybyFrame = items[butDrawTemplate.elements["Flyby"].valueHolder.value].elements["Frames"].valueHolder[0];
-		flybydDiv = $.parseHTML("<div id='Flyby'/>");
-		renderers["Frame"](flybyFrame, flybydDiv);
-		$(flybydDiv).hide(); // Hidden by default.
-		var flybyOffset = $(flybydDiv).offset();
-		flybyOffset.top += parseInt(flybyOffset.top) + parseInt(item.elements["DecalOffset"].valueHolder.elements["Y"].valueHolder.value),
-		flybyOffset.left += parseInt(flybyOffset.left) + parseInt(item.elements["DecalOffset"].valueHolder.elements["X"].valueHolder.value),
-		$(flybydDiv).offset(flybyOffset).css("position", "absolute");
-		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value) > 0) {
-			$(flybydDiv).offset(normalOffset).css("overflow", "hidden");
-			$(flybydDiv).width(parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
-		}
-		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value) > 0) {
-			$(flybydDiv).offset(normalOffset).css("overflow", "hidden");
-			$(flybydDiv).height(parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value));
-		}
-		$(div).append(flybydDiv);
-	}
-
-	$(location).mousedown(function () {
-		if ($(this).find("#Pressed").length > 0) {
-			$(this).find("#Pressed").show();
-			$(this).find("#Normal").hide();
-		}
-		$(this).find("#Flyby").hide();
+	$(div).mousedown(function () {
+		textDiv["Checkbox_State"] = !textDiv["Checkbox_State"];
 		if (item.elements["UseCustomPressedColor"].valueHolder.value) {
 			$(this).find("#textOverlay").css({
 				"color": "rgb(" + item.elements["PressedColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -121,8 +186,7 @@ renderers["Button"] = function (item, location) {
 			});
 		}
 	}).mouseup(function () {
-		$(this).find("#Pressed").hide();
-		$(this).find("#Normal").show();
+		if (textDiv["Checkbox_State"] == true) { return; }
 		$(this).find("#textOverlay").css({
 			"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 				item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
@@ -130,8 +194,7 @@ renderers["Button"] = function (item, location) {
 		});
 		$(this).mouseenter();
 	}).mouseenter(function () {
-		if ($(this).find("#Pressed").css("display") == "none") {
-			$(this).find("#Flyby").show();
+		if (($(this).find("#Pressed").length > 0) ? ($(this).find("#Pressed").css("display") == "none") : true) {
 			if (item.elements["UseCustomMouseoverColor"].valueHolder.value) {
 				$(this).find("#textOverlay").css({
 					"color": "rgb(" + item.elements["MouseoverColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -142,7 +205,6 @@ renderers["Button"] = function (item, location) {
 		}
 	}).mouseleave(function () {
 		if ($(this).find("#Flyby").css("display") != "none") {
-			$(this).find("#Flyby").hide();
 			$(this).find("#textOverlay").css({
 				"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 					item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
@@ -152,4 +214,6 @@ renderers["Button"] = function (item, location) {
 	});
 
 	$(location).append(div);
+	$(location).mouseup();
+	$(location).mouseleave();
 };

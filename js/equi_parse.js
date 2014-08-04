@@ -64,9 +64,9 @@ function showElementProperties(item) {
 	$(document.getElementById("renderView")).empty();
 	$(proplist).empty();
 	if (items[item].type == "Button") {
-		renderers["Button"](items[item], "#renderView");
-	} else if (items[item].type == "Label") {
-		renderers["Button"](items[item], "#renderView");
+		viewers["Button"](items[item], "#renderView");
+	} else if (items[item].type == "Ui2DAnimation") {
+		viewers["Ui2DAnimation"](items[item], "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
