@@ -4,10 +4,17 @@ items = [];
 $(function() {
 	sidl = {};
 	ParseSIDL();
-	// code for IE7+, Firefox, Chrome, Opera, Safari
-	$.get("xml/EQUI_PlayerWindow.xml", "xml")
+	$.ajaxSetup({ async: false });
+	parseXML("EQUI_Animations.xml");
+	parseXML("EQUI_PlayerWindow.xml");
+	$.ajaxSetup({ async: false });
+	populateElementList();
+});
+
+function parseXML(filename) {
+	$.get("xml/" + filename, "xml")
 		.done(
-			function(xml) {
+			function (xml) {
 				var root = getChildElementNode(xml);
 				if (root == null) {
 					console.log("Can't find XML root node.");
@@ -23,7 +30,7 @@ $(function() {
 					console.log("Can't find Schema node.");
 					return;
 				}
-				if ((schema.attributes.item(0).value == "EverQuestData") && (schema.attributes.item(1).value == "EverQuestDataTypes" )) {
+				if ((schema.attributes.item(0).value == "EverQuestData") && (schema.attributes.item(1).value == "EverQuestDataTypes")) {
 					console.log("Valid Schema.");
 				} else {
 					console.log("Schema should read: '<Schema xmlns=\"EverQuestData\" xmlns:dt=\"EverQuestDataTypes\" />'");
@@ -36,11 +43,9 @@ $(function() {
 					items[current.attributes.item(0).value].type = current.nodeName;
 					parseNode(current, items[current.attributes.item(0).value]);
 				}
-				
-				populateElementList();
 			}
 		);
-});
+}
 
 function populateElementList() {
 	// Add a select to choose the element to view.
