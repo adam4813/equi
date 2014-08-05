@@ -70,8 +70,6 @@ function showElementProperties(item) {
 		viewers["TextureInfo"](items[item], "#renderView");
 	} else if (items[item].type == "Ui2DAnimation") {
 		viewers["Ui2DAnimation"](items[item], "#renderView");
-	} else if (items[item].type == "Gauge") {
-		viewers["GaugeDrawTemplate"](items[item].elements["GaugeDrawTemplate"].valueHolder, "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },

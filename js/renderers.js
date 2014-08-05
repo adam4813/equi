@@ -119,6 +119,60 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 	$(location).mouseleave();
 }
 
+viewers["GaugeDrawTemplate"] = function (item, location) {
+	if (items[item.elements["Background"].valueHolder.value]) {
+		var bkgdDiv = $.parseHTML("<div/>");
+		$(bkgdDiv).width(146).height(10).css({ "overflow": "hidden", "position": "relative" });
+		bkgdDiv[0].scaleX = 1.46; bkgdDiv[0].scaleY = 1;
+		viewers["Ui2DAnimation"](items[item.elements["Background"].valueHolder.value], bkgdDiv);
+	}
+
+	if (items[item.elements["Fill"].valueHolder.value]) {
+		var fillDiv = $.parseHTML("<div/>");
+		fillDiv[0].scaleX = 1.46; fillDiv[0].scaleY = 1;
+		$(fillDiv).width("75%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		viewers["Ui2DAnimation"](items[item.elements["Fill"].valueHolder.value], fillDiv);
+	}
+
+	if (items[item.elements["Lines"].valueHolder.value]) {
+		var lineDiv = $.parseHTML("<div/>");
+		lineDiv[0].scaleX = 1.46; lineDiv[0].scaleY = 1;
+		$(lineDiv).width(146).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		viewers["Ui2DAnimation"](items[item.elements["Lines"].valueHolder.value], lineDiv);
+	}
+		
+	if (items[item.elements["LinesFill"].valueHolder.value]) {
+		var lineFillDiv = $.parseHTML("<div/>");
+		lineFillDiv[0].scaleX = 1.46; lineFillDiv[0].scaleY = 1;
+		$(lineFillDiv).width("50%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		viewers["Ui2DAnimation"](items[item.elements["LinesFill"].valueHolder.value], lineFillDiv);
+	}
+		
+	if (items[item.elements["EndCapRight"].valueHolder.value]) {
+		var rightEndDiv = $.parseHTML("<div/>");
+		rightEndDiv[0].scaleX = 1; rightEndDiv[0].scaleY = 1;
+		$(rightEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" });
+		viewers["Ui2DAnimation"](items[item.elements["EndCapRight"].valueHolder.value], rightEndDiv);
+	}
+		
+	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
+		var leftEndDiv = $.parseHTML("<div/>");
+		leftEndDiv[0].scaleX = 1; leftEndDiv[0].scaleY = 1;
+		$(leftEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		viewers["Ui2DAnimation"](items[item.elements["EndCapLeft"].valueHolder.value], leftEndDiv);
+	}
+
+	var gaugeDiv = $.parseHTML("<div/>");
+	$(gaugeDiv).css({ "overflow": "hidden", "position": "relative" });
+	$(gaugeDiv).append(bkgdDiv);
+	$(gaugeDiv).append(fillDiv);
+	$(gaugeDiv).append(lineDiv);
+	$(gaugeDiv).append(lineFillDiv);
+	$(gaugeDiv).append(rightEndDiv);
+	$(gaugeDiv).append(leftEndDiv);
+	$(location).append(gaugeDiv).width(146);
+}
+
 /* TODO:
 Control
 |- Style_VScroll
