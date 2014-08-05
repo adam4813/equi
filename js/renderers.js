@@ -30,7 +30,7 @@ viewers["Frame"] = function (item, location) {
 		"height": img[0].height * location[0].scaleY + "px",
 	});
 	$(location).append(img);
-	$(location).width(parseInt(size.elements["CX"].valueHolder.value) * location[0].scaleX).height(parseInt(size.elements["CY"].valueHolder.value) * location[0].scaleX);
+	$(location).width(parseInt(size.elements["CX"].valueHolder.value) * location[0].scaleX).height(parseInt(size.elements["CY"].valueHolder.value) * location[0].scaleY);
 };
 
 /* TODO:
@@ -119,10 +119,11 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 	$(location).mouseleave();
 }
 
+// TODO: Implement sizing for image "scaling"/stretching
 viewers["GaugeDrawTemplate"] = function (item, location) {
 	if (items[item.elements["Background"].valueHolder.value]) {
 		var bkgdDiv = $.parseHTML("<div/>");
-		$(bkgdDiv).width(146).height(10).css({ "overflow": "hidden", "position": "relative" });
+		$(bkgdDiv).width(146).height(10).css({ "overflow": "hidden", "position": "relative" }).attr("id", "Background");
 		bkgdDiv[0].scaleX = 1.46; bkgdDiv[0].scaleY = 1;
 		viewers["Ui2DAnimation"](items[item.elements["Background"].valueHolder.value], bkgdDiv);
 	}
@@ -130,47 +131,41 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 	if (items[item.elements["Fill"].valueHolder.value]) {
 		var fillDiv = $.parseHTML("<div/>");
 		fillDiv[0].scaleX = 1.46; fillDiv[0].scaleY = 1;
-		$(fillDiv).width("75%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		$(fillDiv).width("75%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Fill");
 		viewers["Ui2DAnimation"](items[item.elements["Fill"].valueHolder.value], fillDiv);
 	}
 
 	if (items[item.elements["Lines"].valueHolder.value]) {
 		var lineDiv = $.parseHTML("<div/>");
 		lineDiv[0].scaleX = 1.46; lineDiv[0].scaleY = 1;
-		$(lineDiv).width(146).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		$(lineDiv).width(146).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Lines");
 		viewers["Ui2DAnimation"](items[item.elements["Lines"].valueHolder.value], lineDiv);
 	}
 		
 	if (items[item.elements["LinesFill"].valueHolder.value]) {
 		var lineFillDiv = $.parseHTML("<div/>");
 		lineFillDiv[0].scaleX = 1.46; lineFillDiv[0].scaleY = 1;
-		$(lineFillDiv).width("50%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		$(lineFillDiv).width("50%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "LinesFill");
 		viewers["Ui2DAnimation"](items[item.elements["LinesFill"].valueHolder.value], lineFillDiv);
 	}
 		
 	if (items[item.elements["EndCapRight"].valueHolder.value]) {
 		var rightEndDiv = $.parseHTML("<div/>");
 		rightEndDiv[0].scaleX = 1; rightEndDiv[0].scaleY = 1;
-		$(rightEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" });
+		$(rightEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" }).attr("id", "EndCapRight");
 		viewers["Ui2DAnimation"](items[item.elements["EndCapRight"].valueHolder.value], rightEndDiv);
 	}
 		
 	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
 		var leftEndDiv = $.parseHTML("<div/>");
 		leftEndDiv[0].scaleX = 1; leftEndDiv[0].scaleY = 1;
-		$(leftEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" });
+		$(leftEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "EndCapLeft");
 		viewers["Ui2DAnimation"](items[item.elements["EndCapLeft"].valueHolder.value], leftEndDiv);
 	}
 
-	var gaugeDiv = $.parseHTML("<div/>");
-	$(gaugeDiv).css({ "overflow": "hidden", "position": "relative" });
-	$(gaugeDiv).append(bkgdDiv);
-	$(gaugeDiv).append(fillDiv);
-	$(gaugeDiv).append(lineDiv);
-	$(gaugeDiv).append(lineFillDiv);
-	$(gaugeDiv).append(rightEndDiv);
-	$(gaugeDiv).append(leftEndDiv);
-	$(location).append(gaugeDiv).width(146);
+	$(location)
+		.append(bkgdDiv).append(fillDiv).append(lineDiv)
+		.append(lineFillDiv).append(rightEndDiv).append(leftEndDiv);
 }
 
 /* TODO:
@@ -199,7 +194,7 @@ viewers["Button"] = function (item, location) {
 	$(div).css({ "position": "absolute" });
 
 	// Make the text overlay.
-	var textDiv = $.parseHTML("<div id='textOverlay'>" + item.elements["Text"].valueHolder.value);
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
 	$(textDiv).css({
 		"position": "relative",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -241,7 +236,7 @@ viewers["Button"] = function (item, location) {
 	$(div).mousedown(function () {
 		textDiv["Checkbox_State"] = !textDiv["Checkbox_State"];
 		if (item.elements["UseCustomPressedColor"].valueHolder.value) {
-			$(this).find("#textOverlay").css({
+			$(this).find("#Text").css({
 				"color": "rgb(" + item.elements["PressedColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 					item.elements["PressedColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 					item.elements["PressedColor"].valueHolder.elements["B"].valueHolder.value + ")",
@@ -249,7 +244,7 @@ viewers["Button"] = function (item, location) {
 		}
 	}).mouseup(function () {
 		if (textDiv["Checkbox_State"] == true) { return; }
-		$(this).find("#textOverlay").css({
+		$(this).find("#Text").css({
 			"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 				item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 				item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
@@ -258,7 +253,7 @@ viewers["Button"] = function (item, location) {
 	}).mouseenter(function () {
 		if (($(this).find("#Pressed").length > 0) ? ($(this).find("#Pressed").css("display") == "none") : true) {
 			if (item.elements["UseCustomMouseoverColor"].valueHolder.value) {
-				$(this).find("#textOverlay").css({
+				$(this).find("#Text").css({
 					"color": "rgb(" + item.elements["MouseoverColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 						item.elements["MouseoverColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 						item.elements["MouseoverColor"].valueHolder.elements["B"].valueHolder.value + ")",
@@ -267,7 +262,7 @@ viewers["Button"] = function (item, location) {
 		}
 	}).mouseleave(function () {
 		if ($(this).find("#Flyby").css("display") != "none") {
-			$(this).find("#textOverlay").css({
+			$(this).find("#Text").css({
 				"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 					item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 					item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
@@ -279,3 +274,58 @@ viewers["Button"] = function (item, location) {
 	$(location).mouseup();
 	$(location).mouseleave();
 };
+
+/* TODO:
+Control
+|- Style_VScroll
+|- Style_HScroll
+|- Style_AutoVScroll
+|- Style_AutoHScroll
+|- Style_Transparent
+|- Style_TransparentControl
+|- Style_Border
+|- Style_Tooltip
+|- EQType
+|- DrawTemplate
+|- Layout
+Gauge
+|- FillTint
+|- LinesFillTint
+*/
+viewers["Gauge"] = function (item, location) {
+	var div = $.parseHTML("<div/>");
+	$(div).css({
+		"position": "absolute",
+		"left": item.elements["Location"].valueHolder.elements["X"].valueHolder.value + "px",
+		"top": item.elements["Location"].valueHolder.elements["Y"].valueHolder.value + "px"})
+		.width(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value)
+		.height(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value);
+
+	// Make the text overlay.
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	$(textDiv).css({
+		"position": "relative",
+		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
+		"left": item.elements["TextOffsetX"].valueHolder.value,
+		"top": item.elements["TextOffsetY"].valueHolder.value,
+	});
+	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
+
+	var gaugeDiv = $.parseHTML("<div/>");
+	$(gaugeDiv).css({
+		"position": "absolute",
+		"left": item.elements["GaugeOffsetX"].valueHolder.value + "px",
+		"top": item.elements["GaugeOffsetY"].valueHolder.value + "px" })
+		.width(parseInt(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value) - parseInt(item.elements["GaugeOffsetX"].valueHolder.value))
+		.height(parseInt(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value) - parseInt(item.elements["GaugeOffsetY"].valueHolder.value));
+	viewers["GaugeDrawTemplate"](item.elements["GaugeDrawTemplate"].valueHolder, gaugeDiv);
+
+	if (item.elements["DrawLinesFill"].valueHolder.value == false) {
+		$(gaugeDiv).find("#LinesFill").hide();
+	}
+
+	$(div).append(textDiv).append(gaugeDiv);
+	$(location).append(div);
+}
