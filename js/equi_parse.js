@@ -41,6 +41,7 @@ function parseXML(filename) {
 					next = getSiblingElementNode(next);
 					items[current.attributes.item(0).value] = $.extend(true, {}, sidl[current.nodeName]);
 					items[current.attributes.item(0).value].type = current.nodeName;
+					items[current.attributes.item(0).value].item = current.attributes.item(0).value;
 					parseNode(current, items[current.attributes.item(0).value]);
 				}
 			}
@@ -65,8 +66,12 @@ function showElementProperties(item) {
 	$(proplist).empty();
 	if (items[item].type == "Button") {
 		viewers["Button"](items[item], "#renderView");
+	} else if (items[item].type == "TextureInfo") {
+		viewers["TextureInfo"](items[item], "#renderView");
 	} else if (items[item].type == "Ui2DAnimation") {
 		viewers["Ui2DAnimation"](items[item], "#renderView");
+	} else if (items[item].type == "Gauge") {
+		viewers["GaugeDrawTemplate"](items[item].elements["GaugeDrawTemplate"].valueHolder, "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },

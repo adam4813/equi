@@ -1,5 +1,10 @@
 viewers = {};
 
+viewers["TextureInfo"] = function (item, location) {
+	var img = $.parseHTML("<img src='img/" + item.item + "'/>");
+	$(location).append(img);
+}
+
 /* TODO:
 |- Hotspot
 |- Shading
