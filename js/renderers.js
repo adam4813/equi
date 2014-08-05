@@ -14,22 +14,23 @@ viewers["Frame"] = function (item, location) {
 	var img = $.parseHTML("<img src='img/" + item.elements["Texture"].valueHolder.value + "'/>");
 	var loc = item.elements["Location"].valueHolder;
 	var size = item.elements["Size"].valueHolder;
-	var rect = {
-		top: loc.elements["Y"].valueHolder.value,
-		right: (parseInt(loc.elements["X"].valueHolder.value) + parseInt(size.elements["CX"].valueHolder.value)),
-		bottom: (parseInt(loc.elements["Y"].valueHolder.value) + parseInt(size.elements["CY"].valueHolder.value)),
-		left: loc.elements["X"].valueHolder.value
+	if (location[0].scaleX == null) {
+		location[0].scaleX = 1;
+	}
+	if (location[0].scaleY == null) {
+		location[0].scaleY = 1;
 	}
 	$(img).css({
 		"position": "absolute",
-		"left": "-" + loc.elements["X"].valueHolder.value + "px",
-		"top": "-" + loc.elements["Y"].valueHolder.value + "px",
-		"clip": "rect(" + rect.top + "px " + rect.right + "px " + rect.bottom + "px " + rect.left + "px)",
+		"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * location[0].scaleX) + "px",
+		"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * location[0].scaleY) + "px",
 		"z-index": "-1",
-		"user-select": "none"
+		"user-select": "none",
+		"width": img[0].width * location[0].scaleX + "px",
+		"height": img[0].height * location[0].scaleY + "px",
 	});
 	$(location).append(img);
-	$(location).width(parseInt(size.elements["CX"].valueHolder.value)).height(parseInt(size.elements["CY"].valueHolder.value));
+	$(location).width(parseInt(size.elements["CX"].valueHolder.value) * location[0].scaleX).height(parseInt(size.elements["CY"].valueHolder.value) * location[0].scaleX);
 };
 
 /* TODO:
@@ -44,6 +45,8 @@ viewers["Ui2DAnimation"] = function (item, location) {
 	var div = $.parseHTML("<div/>");
 
 	for (frame in item.elements["Frames"].valueHolder) {
+		div[0].scaleX = location[0].scaleX; div[0].scaleY = location[0].scaleY;
+		$(div).css({ "overflow": "hidden", "position": "relative" });
 		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
 	}
 
