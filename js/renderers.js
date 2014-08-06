@@ -14,23 +14,26 @@ viewers["Frame"] = function (item, location) {
 	var img = $.parseHTML("<img src='img/" + item.elements["Texture"].valueHolder.value + "'/>");
 	var loc = item.elements["Location"].valueHolder;
 	var size = item.elements["Size"].valueHolder;
-	if (location[0].scaleX == null) {
-		location[0].scaleX = 1;
+	var width = $(location).width();
+	var height = $(location).height();
+	if (width == 0) {
+		width = parseInt(size.elements["CX"].valueHolder.value);
 	}
-	if (location[0].scaleY == null) {
-		location[0].scaleY = 1;
+	if (height == 0) {
+		height = parseInt(size.elements["CY"].valueHolder.value);
 	}
+	var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
+	var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
 	$(img).css({
 		"position": "absolute",
-		"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * location[0].scaleX) + "px",
-		"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * location[0].scaleY) + "px",
+		"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
+		"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * scaleY) + "px",
 		"z-index": "-1",
 		"user-select": "none",
-		"width": img[0].width * location[0].scaleX + "px",
-		"height": img[0].height * location[0].scaleY + "px",
+		"width": img[0].width * scaleX + "px",
+		"height": img[0].height * scaleY + "px",
 	});
-	$(location).append(img);
-	$(location).width(parseInt(size.elements["CX"].valueHolder.value) * location[0].scaleX).height(parseInt(size.elements["CY"].valueHolder.value) * location[0].scaleY);
+	$(location).append(img).width(width * scaleX).height(height * scaleY);
 };
 
 /* TODO:
@@ -44,12 +47,22 @@ viewers["Ui2DAnimation"] = function (item, location) {
 	var run = setInterval(animate, item.elements["Frames"].valueHolder[currentFrame].elements["Duration"].valueHolder.value);
 	var div = $.parseHTML("<div/>");
 
-	for (frame in item.elements["Frames"].valueHolder) {
-		div[0].scaleX = location[0].scaleX; div[0].scaleY = location[0].scaleY;
-		$(div).css({ "overflow": "hidden", "position": "relative" });
-		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
+	if (!$(location)[0].scaleX) {
+		$(location)[0].scaleX = 1;
+	}
+	if (!$(location)[0].scaleY) {
+		$(location)[0].scaleY = 1;
 	}
 
+	for (frame in item.elements["Frames"].valueHolder) {
+		div[0].scaleX = $(location)[0].scaleX; div[0].scaleY = $(location)[0].scaleY;
+		$(div).css({ "overflow": "hidden", "position": "relative" });
+		$(div).width($(location).width()).height($(location).height())
+		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
+		$(location).width($(div).width()).height($(div).height());
+	}
+
+	$(div).attr("id", item.item);
 	$(location).append(div);
 
 	$(div).children().not(":eq(0)").hide();
@@ -88,6 +101,7 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 		if (items[item.elements[element].valueHolder.value]) {
 			var frame = items[item.elements[element].valueHolder.value];
 			var frameDiv = $.parseHTML("<div id='" + element + "'/>");
+			$(frameDiv).width($(location).width()).height($(location).height());
 			viewers["Ui2DAnimation"](frame, frameDiv);
 			$(frameDiv).hide();
 			$(location).append(frameDiv);
@@ -123,7 +137,7 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 viewers["GaugeDrawTemplate"] = function (item, location) {
 	if (items[item.elements["Background"].valueHolder.value]) {
 		var bkgdDiv = $.parseHTML("<div/>");
-		$(bkgdDiv).width(146).height(10).css({ "overflow": "hidden", "position": "relative" }).attr("id", "Background");
+		$(bkgdDiv).width($(location).width()).height($(location).height()).css({ "overflow": "hidden", "position": "relative" }).attr("id", "Background");
 		bkgdDiv[0].scaleX = 1.46; bkgdDiv[0].scaleY = 1;
 		viewers["Ui2DAnimation"](items[item.elements["Background"].valueHolder.value], bkgdDiv);
 	}
@@ -131,35 +145,35 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 	if (items[item.elements["Fill"].valueHolder.value]) {
 		var fillDiv = $.parseHTML("<div/>");
 		fillDiv[0].scaleX = 1.46; fillDiv[0].scaleY = 1;
-		$(fillDiv).width("75%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Fill");
+		$(fillDiv).width("75%").height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Fill");
 		viewers["Ui2DAnimation"](items[item.elements["Fill"].valueHolder.value], fillDiv);
 	}
 
 	if (items[item.elements["Lines"].valueHolder.value]) {
 		var lineDiv = $.parseHTML("<div/>");
 		lineDiv[0].scaleX = 1.46; lineDiv[0].scaleY = 1;
-		$(lineDiv).width(146).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Lines");
+		$(lineDiv).width($(location).width()).height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Lines");
 		viewers["Ui2DAnimation"](items[item.elements["Lines"].valueHolder.value], lineDiv);
 	}
 		
 	if (items[item.elements["LinesFill"].valueHolder.value]) {
 		var lineFillDiv = $.parseHTML("<div/>");
 		lineFillDiv[0].scaleX = 1.46; lineFillDiv[0].scaleY = 1;
-		$(lineFillDiv).width("50%").height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "LinesFill");
+		$(lineFillDiv).width("50%").height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "LinesFill");
 		viewers["Ui2DAnimation"](items[item.elements["LinesFill"].valueHolder.value], lineFillDiv);
 	}
 		
 	if (items[item.elements["EndCapRight"].valueHolder.value]) {
 		var rightEndDiv = $.parseHTML("<div/>");
 		rightEndDiv[0].scaleX = 1; rightEndDiv[0].scaleY = 1;
-		$(rightEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" }).attr("id", "EndCapRight");
+		$(rightEndDiv).width(0).height(0).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" }).attr("id", "EndCapRight");
 		viewers["Ui2DAnimation"](items[item.elements["EndCapRight"].valueHolder.value], rightEndDiv);
 	}
 		
 	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
 		var leftEndDiv = $.parseHTML("<div/>");
 		leftEndDiv[0].scaleX = 1; leftEndDiv[0].scaleY = 1;
-		$(leftEndDiv).width(4).height(10).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "EndCapLeft");
+		$(leftEndDiv).width(0).height(0).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "EndCapLeft");
 		viewers["Ui2DAnimation"](items[item.elements["EndCapLeft"].valueHolder.value], leftEndDiv);
 	}
 
@@ -195,6 +209,13 @@ viewers["Button"] = function (item, location) {
 
 	// Make the text overlay.
 	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	var align = "left";
+	if (item.elements["TextAlignCenter"].valueHolder.value == true) {
+		align = "center";
+	} else if (item.elements["TextAlignRight"].valueHolder.value == true) {
+		align = "right";
+	}
+
 	$(textDiv).css({
 		"position": "relative",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -202,9 +223,10 @@ viewers["Button"] = function (item, location) {
 			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
 		"left": item.elements["TextOffsetX"].valueHolder.value,
 		"top": item.elements["TextOffsetY"].valueHolder.value,
-		"text-align": (item.elements["TextAlignCenter"].valueHolder.value) == "true" ? "center" : "left",
-		"text-align": (item.elements["TextAlignRight"].valueHolder.value) == "true" ? "right" : "left",
-		"vertical-align": (item.elements["TextAlignVCenter"].valueHolder.value == "true") ? "middle" : "initial"
+		"text-align": align,
+		"vertical-align": (item.elements["TextAlignVCenter"].valueHolder.value == "true") ? "middle" : "initial",
+		"width": item.elements["Size"].valueHolder.elements["CX"].valueHolder.value + "px",
+		"height": item.elements["Size"].valueHolder.elements["CY"].valueHolder.value + "px"
 	});
 	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
@@ -223,7 +245,7 @@ viewers["Button"] = function (item, location) {
 		$(decalElements[i]).offset(normalOffset).css("position", "absolute");
 		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value) > 0) {
 			$(decalElements[i]).offset(normalOffset).css("overflow", "hidden");
-			$(decalElements[i]).width(parseInt(item.elements["DecalSize"]["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
+			$(decalElements[i]).width(parseInt(item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value));
 		}
 		if (parseInt(item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value) > 0) {
 			$(decalElements[i]).offset(normalOffset).css("overflow", "hidden");
@@ -231,7 +253,7 @@ viewers["Button"] = function (item, location) {
 		}
 	}
 
-	$(div).append(textDiv);
+	$(div).append(textDiv).attr("id", item.item);
 
 	$(div).mousedown(function () {
 		textDiv["Checkbox_State"] = !textDiv["Checkbox_State"];
@@ -316,16 +338,68 @@ viewers["Gauge"] = function (item, location) {
 	var gaugeDiv = $.parseHTML("<div/>");
 	$(gaugeDiv).css({
 		"position": "absolute",
+		"overflow": "hidden",
 		"left": item.elements["GaugeOffsetX"].valueHolder.value + "px",
 		"top": item.elements["GaugeOffsetY"].valueHolder.value + "px" })
 		.width(parseInt(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value) - parseInt(item.elements["GaugeOffsetX"].valueHolder.value))
-		.height(parseInt(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value) - parseInt(item.elements["GaugeOffsetY"].valueHolder.value));
+		.height(parseInt(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value) - parseInt(item.elements["GaugeOffsetY"].valueHolder.value))
+		.attr("id", "GaugeDrawTemplate");
 	viewers["GaugeDrawTemplate"](item.elements["GaugeDrawTemplate"].valueHolder, gaugeDiv);
 
 	if (item.elements["DrawLinesFill"].valueHolder.value == false) {
 		$(gaugeDiv).find("#LinesFill").hide();
 	}
 
-	$(div).append(textDiv).append(gaugeDiv);
+	$(div).append(textDiv).append(gaugeDiv).attr("id", item.item);
+	$(location).append(div);
+}
+
+/* TODO:
+Control
+|- Style_VScroll
+|- Style_HScroll
+|- Style_AutoVScroll
+|- Style_AutoHScroll
+|- Style_Transparent
+|- Style_TransparentControl
+|- Style_Border
+|- Style_Tooltip
+|- EQType
+|- DrawTemplate
+|- Layout
+Label
+|- ResizeHeightToText
+*/
+viewers["Label"] = function (item, location) {
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	var align = "left";
+	if (item.elements["AlignCenter"].valueHolder.value == true) {
+		align = "center";
+	} else if (item.elements["AlignRight"].valueHolder.value == true) {
+		align = "right";
+	}
+	$(textDiv).css({
+		"position": "absolute",
+		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
+		"text-align": align,
+		"white-space": "nowrap"
+	}).attr("title", (item.elements["TooltipReference"].valueHolder.value));
+
+
+	var div = $.parseHTML("<div/>");
+	
+	$(div).css({
+		"position": "absolute",
+		"overflow": "hidden",
+		"left": item.elements["Location"].valueHolder.elements["X"].valueHolder.value + "px",
+		"top": item.elements["Location"].valueHolder.elements["Y"].valueHolder.value + "px",
+		"width": item.elements["Size"].valueHolder.elements["CX"].valueHolder.value + "px",
+		"height": item.elements["Size"].valueHolder.elements["CY"].valueHolder.value + "px"
+	}).append(textDiv).attr("id", item.item);
+	$(location).append(div);
+}
+
 	$(location).append(div);
 }

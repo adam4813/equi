@@ -69,9 +69,14 @@ function showElementProperties(item) {
 	} else if (items[item].type == "TextureInfo") {
 		viewers["TextureInfo"](items[item], "#renderView");
 	} else if (items[item].type == "Ui2DAnimation") {
-		viewers["Ui2DAnimation"](items[item], "#renderView");
+		// We must do this specific for raw Ui2DAnimation to get it to size the parent element correctly.
+		var imgDiv = $.parseHTML("<div width='0px' height='0px'/>");
+		viewers["Ui2DAnimation"](items[item], imgDiv);
+		$("#renderView").append(imgDiv);
 	} else if (items[item].type == "Gauge") {
 		viewers["Gauge"](items[item], "#renderView");
+	} else if (items[item].type == "Label") {
+		viewers["Label"](items[item], "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
