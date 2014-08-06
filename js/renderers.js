@@ -401,5 +401,34 @@ viewers["Label"] = function (item, location) {
 	$(location).append(div);
 }
 
+viewers["Screen"] = function (item, location) {
+	var div = $.parseHTML("<div/>");
+	$(div).css({
+		"position": "absolute",
+		"left": item.elements["Location"].valueHolder.elements["X"].valueHolder.value + "px",
+		"top": item.elements["Location"].valueHolder.elements["Y"].valueHolder.value + "px"
+		})
+		.width(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value)
+		.height(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value);
+
+	// Make the text overlay.
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	$(textDiv).css({
+		"position": "absolute",
+		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
+			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
+	}).attr("title", (item.elements["TooltipReference"].valueHolder.value));
+
+	$(div).append(textDiv);
+	for (var i = 0; i < item.elements["Pieces"].valueHolder.length; i++) {
+		if (viewers[items[item.elements["Pieces"].valueHolder[i].value].type]) {
+			//var pieceDiv = $.parseHTML("<div/>");
+			//$(pieceDiv).css({ "position": "absolute", "overflow": "hidden" });
+			viewers[items[item.elements["Pieces"].valueHolder[i].value].type](items[item.elements["Pieces"].valueHolder[i].value], div);
+			//$(div).append(pieceDiv);
+		}
+	}
+
 	$(location).append(div);
 }

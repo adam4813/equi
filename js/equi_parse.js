@@ -77,6 +77,8 @@ function showElementProperties(item) {
 		viewers["Gauge"](items[item], "#renderView");
 	} else if (items[item].type == "Label") {
 		viewers["Label"](items[item], "#renderView");
+	} else if (items[item].type == "Screen") {
+		viewers["Screen"](items[item], "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },

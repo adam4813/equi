@@ -3,7 +3,7 @@
    <Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
 	<Ui2DAnimation item="A_NewMailIcon">
 		<Frames>
-			<Texture>window_pieces04.tga</Texture>
+			<Texture>window_pieces04.png</Texture>
 			<Location>
 				<X>219</X>
 				<Y>230</Y>
@@ -18,10 +18,10 @@
 			</Hotspot>
 		</Frames>
 		<Frames>
-			<Texture>window_pieces01.tga</Texture>
+			<Texture>window_pieces01.png</Texture>
 			<Location>
-				<X>219</X>
-				<Y>230</Y>
+				<X>100</X>
+				<Y>100</Y>
 			</Location>
 			<Size>
 				<CX>26</CX>
@@ -90,7 +90,7 @@
         <Ui2DAnimation item="A_PWCSInCombat">
                 <Cycle>true</Cycle>
                 <Frames>
-                        <Texture>window_pieces06.tga</Texture>
+                        <Texture>window_pieces06.png</Texture>
                         <Location>
                                 <X>200</X>
                                 <Y>0</Y>
@@ -110,7 +110,7 @@
         <Ui2DAnimation item="A_PWCSTimer">
                 <Cycle>true</Cycle>
                 <Frames>
-                        <Texture>window_pieces06.tga</Texture>
+                        <Texture>window_pieces06.png</Texture>
                         <Location>
                                 <X>200</X>
                                 <Y>80</Y>
@@ -130,7 +130,7 @@
         <Ui2DAnimation item="A_PWCSDebuff">
                 <Cycle>true</Cycle>
                 <Frames>
-                        <Texture>window_pieces06.tga</Texture>
+                        <Texture>window_pieces06.png</Texture>
                         <Location>
                                 <X>200</X>
                                 <Y>40</Y>
@@ -150,7 +150,7 @@
         <Ui2DAnimation item="A_PWCSStanding">
                 <Cycle>true</Cycle>
                 <Frames>
-                        <Texture>window_pieces06.tga</Texture>
+                        <Texture>window_pieces06.png</Texture>
                         <Location>
                                 <X>200</X>
                                 <Y>120</Y>
@@ -170,7 +170,7 @@
         <Ui2DAnimation item="A_PWCSRegen">
                 <Cycle>true</Cycle>
                 <Frames>
-                        <Texture>window_pieces06.tga</Texture>
+                        <Texture>window_pieces06.png</Texture>
                         <Location>
                                 <X>200</X>
                                 <Y>160</Y>
@@ -1237,7 +1237,7 @@
         </Button>
 
 
-	<TextureInfo item="AttackIndicator.tga">
+	<TextureInfo item="AttackIndicator.png">
 		<Size>
 			<CX>128</CX>
 			<CY>32</CY>
@@ -1246,7 +1246,7 @@
 	<Ui2DAnimation item="A_AttackIndicatorTop">
 		<Cycle>false</Cycle>
 		<Frames>
-			<Texture>AttackIndicator.tga</Texture>
+			<Texture>AttackIndicator.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>0</Y>
@@ -1260,7 +1260,7 @@
 	<Ui2DAnimation item="A_AttackIndicatorBottom">
 		<Cycle>false</Cycle>
 		<Frames>
-			<Texture>AttackIndicator.tga</Texture>
+			<Texture>AttackIndicator.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>29</Y>
@@ -1274,7 +1274,7 @@
 	<Ui2DAnimation item="A_AttackIndicatorLeft">
 		<Cycle>false</Cycle>
 		<Frames>
-			<Texture>AttackIndicator.tga</Texture>
+			<Texture>AttackIndicator.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>2</Y>
@@ -1288,7 +1288,7 @@
 	<Ui2DAnimation item="A_AttackIndicatorRight">
 		<Cycle>false</Cycle>
 		<Frames>
-			<Texture>AttackIndicator.tga</Texture>
+			<Texture>AttackIndicator.png</Texture>
 			<Location>
 				<X>111</X>
 				<Y>3</Y>
@@ -1302,7 +1302,7 @@
 	<Ui2DAnimation item="A_AttackIndicatorFill">
 		<Cycle>false</Cycle>
 		<Frames>
-			<Texture>AttackIndicator.tga</Texture>
+			<Texture>AttackIndicator.png</Texture>
 			<Location>
 				<X>4</X>
 				<Y>4</Y>
