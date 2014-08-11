@@ -1,6 +1,33 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<style>
+			* { /* This is a game, not a document.  If I want them I'll explicitly add them! */
+				padding: 0;
+				margin: 0;
+				border: 0;
+			}
+
+			div {
+				overflow: hidden;
+			}
+
+			div .gauge {
+				position: absolute;
+				line-height: 0;
+				font-size: 0;
+			}
+
+			div .gauge .piece {
+				display: inline-block;
+				position: relative;
+			}
+
+			div .gauge .bar {
+				position: absolute;
+				top: 0px;
+			}
+		</style>
 		<title>EQUI Editor</title>
 		
 		<!-- jquery -->

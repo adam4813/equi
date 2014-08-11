@@ -16,14 +16,19 @@ viewers["Frame"] = function (item, location) {
 	var size = item.elements["Size"].valueHolder;
 	var width = $(location).width();
 	var height = $(location).height();
+
+	// If there isn't a defined width/height we will use the frame's width/height.
 	if (width == 0) {
 		width = parseInt(size.elements["CX"].valueHolder.value);
 	}
 	if (height == 0) {
 		height = parseInt(size.elements["CY"].valueHolder.value);
 	}
+
+	// Determine the scaling factor that needs to be applied to match the width/height.
 	var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
 	var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
+
 	$(img).css({
 		"position": "absolute",
 		"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
@@ -33,7 +38,7 @@ viewers["Frame"] = function (item, location) {
 		"width": img[0].width * scaleX + "px",
 		"height": img[0].height * scaleY + "px",
 	});
-	$(location).append(img).width(width * scaleX).height(height * scaleY);
+	$(location).append(img).width(width).height(height);
 };
 
 /* TODO:
@@ -47,19 +52,10 @@ viewers["Ui2DAnimation"] = function (item, location) {
 	var run = setInterval(animate, item.elements["Frames"].valueHolder[currentFrame].elements["Duration"].valueHolder.value);
 	var div = $.parseHTML("<div/>");
 
-	if (!$(location)[0].scaleX) {
-		$(location)[0].scaleX = 1;
-	}
-	if (!$(location)[0].scaleY) {
-		$(location)[0].scaleY = 1;
-	}
-
 	for (frame in item.elements["Frames"].valueHolder) {
-		div[0].scaleX = $(location)[0].scaleX; div[0].scaleY = $(location)[0].scaleY;
 		$(div).css({ "overflow": "hidden", "position": "relative" });
 		$(div).width($(location).width()).height($(location).height())
 		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
-		$(location).width($(div).width()).height($(div).height());
 	}
 
 	$(div).attr("id", item.item);
@@ -135,51 +131,51 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 
 // TODO: Implement sizing for image "scaling"/stretching
 viewers["GaugeDrawTemplate"] = function (item, location) {
+	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
+		var leftEndDiv = $.parseHTML("<div/>");
+		$(leftEndDiv).height($(location).height()).addClass("piece").attr("id", "EndCapLeft");
+		viewers["Ui2DAnimation"](items[item.elements["EndCapLeft"].valueHolder.value], leftEndDiv);
+	}
+
+	if (items[item.elements["EndCapRight"].valueHolder.value]) {
+		var rightEndDiv = $.parseHTML("<div/>");
+		$(rightEndDiv).height($(location).height()).addClass("piece").attr("id", "EndCapRight");
+		viewers["Ui2DAnimation"](items[item.elements["EndCapRight"].valueHolder.value], rightEndDiv);
+	}
+
 	if (items[item.elements["Background"].valueHolder.value]) {
 		var bkgdDiv = $.parseHTML("<div/>");
-		$(bkgdDiv).width($(location).width()).height($(location).height()).css({ "overflow": "hidden", "position": "relative" }).attr("id", "Background");
-		bkgdDiv[0].scaleX = 1.46; bkgdDiv[0].scaleY = 1;
+		var capWidth = $(leftEndDiv).children().width() + $(rightEndDiv).children().width();
+		$(bkgdDiv).width($(location).width() - capWidth).height($(location).height()).addClass("piece").attr("id", "Background");
 		viewers["Ui2DAnimation"](items[item.elements["Background"].valueHolder.value], bkgdDiv);
 	}
 
 	if (items[item.elements["Fill"].valueHolder.value]) {
 		var fillDiv = $.parseHTML("<div/>");
 		fillDiv[0].scaleX = 1.46; fillDiv[0].scaleY = 1;
-		$(fillDiv).width("75%").height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Fill");
+		$(fillDiv).width("75%").height($(location).height())
+			.css({ "left": "4px" }).addClass("bar").attr("id", "Fill");
 		viewers["Ui2DAnimation"](items[item.elements["Fill"].valueHolder.value], fillDiv);
 	}
 
 	if (items[item.elements["Lines"].valueHolder.value]) {
 		var lineDiv = $.parseHTML("<div/>");
 		lineDiv[0].scaleX = 1.46; lineDiv[0].scaleY = 1;
-		$(lineDiv).width($(location).width()).height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "Lines");
+		$(lineDiv).width($(location).width()).height($(location).height())
+			.css({ "left": "4px" }).addClass("bar").attr("id", "Lines");
 		viewers["Ui2DAnimation"](items[item.elements["Lines"].valueHolder.value], lineDiv);
 	}
 		
 	if (items[item.elements["LinesFill"].valueHolder.value]) {
 		var lineFillDiv = $.parseHTML("<div/>");
 		lineFillDiv[0].scaleX = 1.46; lineFillDiv[0].scaleY = 1;
-		$(lineFillDiv).width("50%").height($(location).height()).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "LinesFill");
+		$(lineFillDiv).width("50%").height($(location).height())
+			.css({ "left": "4px" }).addClass("bar").attr("id", "LinesFill");
 		viewers["Ui2DAnimation"](items[item.elements["LinesFill"].valueHolder.value], lineFillDiv);
 	}
-		
-	if (items[item.elements["EndCapRight"].valueHolder.value]) {
-		var rightEndDiv = $.parseHTML("<div/>");
-		rightEndDiv[0].scaleX = 1; rightEndDiv[0].scaleY = 1;
-		$(rightEndDiv).width(0).height(0).css({ "overflow": "hidden", "position": "absolute", "right": "0px", "top": "0px" }).attr("id", "EndCapRight");
-		viewers["Ui2DAnimation"](items[item.elements["EndCapRight"].valueHolder.value], rightEndDiv);
-	}
-		
-	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
-		var leftEndDiv = $.parseHTML("<div/>");
-		leftEndDiv[0].scaleX = 1; leftEndDiv[0].scaleY = 1;
-		$(leftEndDiv).width(0).height(0).css({ "overflow": "hidden", "position": "absolute", "top": "0px" }).attr("id", "EndCapLeft");
-		viewers["Ui2DAnimation"](items[item.elements["EndCapLeft"].valueHolder.value], leftEndDiv);
-	}
 
-	$(location)
-		.append(bkgdDiv).append(fillDiv).append(lineDiv)
-		.append(lineFillDiv).append(rightEndDiv).append(leftEndDiv);
+	$(location).append(leftEndDiv).append(bkgdDiv).append(rightEndDiv)
+		.append(fillDiv).append(lineDiv).append(lineFillDiv);
 }
 
 /* TODO:
@@ -324,7 +320,7 @@ viewers["Gauge"] = function (item, location) {
 		.height(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value);
 
 	// Make the text overlay.
-	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value + "</div>");
 	$(textDiv).css({
 		"position": "relative",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -336,9 +332,7 @@ viewers["Gauge"] = function (item, location) {
 	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
 	var gaugeDiv = $.parseHTML("<div/>");
-	$(gaugeDiv).css({
-		"position": "absolute",
-		"overflow": "hidden",
+	$(gaugeDiv).addClass("gauge").css({
 		"left": item.elements["GaugeOffsetX"].valueHolder.value + "px",
 		"top": item.elements["GaugeOffsetY"].valueHolder.value + "px" })
 		.width(parseInt(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value) - parseInt(item.elements["GaugeOffsetX"].valueHolder.value))
@@ -371,7 +365,7 @@ Label
 |- ResizeHeightToText
 */
 viewers["Label"] = function (item, location) {
-	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value + "</div>");
 	var align = "left";
 	if (item.elements["AlignCenter"].valueHolder.value == true) {
 		align = "center";
