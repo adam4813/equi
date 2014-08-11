@@ -154,7 +154,7 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 		var fillDiv = $.parseHTML("<div/>");
 		fillDiv[0].scaleX = 1.46; fillDiv[0].scaleY = 1;
 		$(fillDiv).width("75%").height($(location).height())
-			.css({ "left": "4px" }).addClass("bar").attr("id", "Fill");
+			.css({ "left": $(leftEndDiv).children().width() + "px" }).addClass("bar").attr("id", "Fill");
 		viewers["Ui2DAnimation"](items[item.elements["Fill"].valueHolder.value], fillDiv);
 	}
 
@@ -162,7 +162,7 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 		var lineDiv = $.parseHTML("<div/>");
 		lineDiv[0].scaleX = 1.46; lineDiv[0].scaleY = 1;
 		$(lineDiv).width($(location).width()).height($(location).height())
-			.css({ "left": "4px" }).addClass("bar").attr("id", "Lines");
+			.css({ "left": $(leftEndDiv).children().width() + "px" }).addClass("bar").attr("id", "Lines");
 		viewers["Ui2DAnimation"](items[item.elements["Lines"].valueHolder.value], lineDiv);
 	}
 		
@@ -170,7 +170,7 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 		var lineFillDiv = $.parseHTML("<div/>");
 		lineFillDiv[0].scaleX = 1.46; lineFillDiv[0].scaleY = 1;
 		$(lineFillDiv).width("50%").height($(location).height())
-			.css({ "left": "4px" }).addClass("bar").attr("id", "LinesFill");
+			.css({ "left": $(leftEndDiv).children().width() + "px" }).addClass("bar").attr("id", "LinesFill");
 		viewers["Ui2DAnimation"](items[item.elements["LinesFill"].valueHolder.value], lineFillDiv);
 	}
 
