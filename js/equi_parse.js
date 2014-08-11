@@ -6,6 +6,7 @@ $(function() {
 	ParseSIDL();
 	$.ajaxSetup({ async: false });
 	parseXML("EQUI_Animations.xml");
+	parseXML("EQUI_Templates.xml");
 	parseXML("EQUI_PlayerWindow.xml");
 	$.ajaxSetup({ async: false });
 	populateElementList();
@@ -79,6 +80,8 @@ function showElementProperties(item) {
 		viewers["Label"](items[item], "#renderView");
 	} else if (items[item].type == "Screen") {
 		viewers["Screen"](items[item], "#renderView");
+	} else if (items[item].type == "WindowDrawTemplate") {
+		viewers["WindowDrawTemplate"](items[item], "#renderView");
 	} else {
 		for (var key in items[item].elements) {
 			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },

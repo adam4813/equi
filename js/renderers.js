@@ -111,7 +111,7 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 		}
 		$(this).find("#Flyby").hide();
 	}).mouseup(function () {
-		// We must reference Checkbox_State to ensure proper bevaior (set in Button).
+		// We must reference Checkbox_State to ensure proper behavior (set in Button).
 		if (location["Checkbox_State"] == true) { return; }
 		$(this).find("#Pressed").hide();
 		$(this).find("#Normal").show();
@@ -129,7 +129,6 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 	$(location).mouseleave();
 }
 
-// TODO: Implement sizing for image "scaling"/stretching
 viewers["GaugeDrawTemplate"] = function (item, location) {
 	if (items[item.elements["EndCapLeft"].valueHolder.value]) {
 		var leftEndDiv = $.parseHTML("<div/>");
@@ -178,6 +177,120 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 		.append(fillDiv).append(lineDiv).append(lineFillDiv);
 }
 
+/* TODO
+|- Overlap (set both middleMiddle and child div to overflow: visible, and adjust margin and then width/height).
+*/
+
+viewers["FrameTemplate"] = function (item, location) {
+	var top = $($.parseHTML("<div />")).addClass("section").attr("id", "Top");
+	if (items[item.elements["TopLeft"].valueHolder.value]) {
+		var topLeftdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopLeft");
+		viewers["Ui2DAnimation"](items[item.elements["TopLeft"].valueHolder.value], topLeftdiv);
+	}
+
+	if (items[item.elements["TopRight"].valueHolder.value]) {
+		var topRightdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopRight");
+		viewers["Ui2DAnimation"](items[item.elements["TopRight"].valueHolder.value], topRightdiv);
+	}
+
+	if (items[item.elements["Top"].valueHolder.value]) {
+		var capWidth = $(topLeftdiv).children().width() + $(topRightdiv).children().width();
+		var topdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopMiddle").width($(location).width() - capWidth);
+		viewers["Ui2DAnimation"](items[item.elements["Top"].valueHolder.value], topdiv);
+	}
+	$(top).append(topLeftdiv).append(topdiv).append(topRightdiv);
+
+	var bottom = $($.parseHTML("<div />")).addClass("section").attr("id", "Bottom");
+	if (items[item.elements["BottomLeft"].valueHolder.value]) {
+		var bottomLeftdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomLeft");
+		viewers["Ui2DAnimation"](items[item.elements["BottomLeft"].valueHolder.value], bottomLeftdiv);
+	}
+
+	if (items[item.elements["BottomRight"].valueHolder.value]) {
+		var bottomRightdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomRight");
+		viewers["Ui2DAnimation"](items[item.elements["BottomRight"].valueHolder.value], bottomRightdiv);
+	}
+
+	if (items[item.elements["Bottom"].valueHolder.value]) {
+		var capWidth = $(bottomLeftdiv).children().width() + $(bottomRightdiv).children().width();
+		var bottomdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomMiddle").width($(location).width() - capWidth);
+		viewers["Ui2DAnimation"](items[item.elements["Bottom"].valueHolder.value], bottomdiv);
+	}
+	$(bottom).append(bottomLeftdiv).append(bottomdiv).append(bottomRightdiv);
+
+	var topBottomHeight = $(top).children().children().height() + $(bottom).children().children().height();
+
+	var middle = $($.parseHTML("<div/>")).addClass("section").attr("id", "Middle").height($(location).height() - topBottomHeight);
+	var left = $($.parseHTML("<div />")).addClass("piece").attr("id", "Left");
+	if (items[item.elements["LeftTop"].valueHolder.value]) {
+		var leftTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftTop");
+		viewers["Ui2DAnimation"](items[item.elements["LeftTop"].valueHolder.value], leftTopdiv);
+	}
+
+	if (items[item.elements["LeftBottom"].valueHolder.value]) {
+		var leftBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftBottom");
+		viewers["Ui2DAnimation"](items[item.elements["LeftBottom"].valueHolder.value], leftBottomdiv);
+	}
+
+	if (items[item.elements["Left"].valueHolder.value]) {
+		var capHeight = $(leftTopdiv).children().height() + $(leftBottomdiv).children().height();
+		var leftdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftMiddle").height($(middle).height() - capHeight);
+		viewers["Ui2DAnimation"](items[item.elements["Left"].valueHolder.value], leftdiv);
+	}
+	$(left).append(leftTopdiv).append(leftdiv).append(leftBottomdiv);
+
+	var right = $($.parseHTML("<div />")).addClass("piece").attr("id", "Right");
+	if (items[item.elements["RightTop"].valueHolder.value]) {
+		var rightTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightTop");
+		viewers["Ui2DAnimation"](items[item.elements["RightTop"].valueHolder.value], rightTopdiv);
+	}
+
+	if (items[item.elements["RightBottom"].valueHolder.value]) {
+		var rightBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightBottom");
+		viewers["Ui2DAnimation"](items[item.elements["RightBottom"].valueHolder.value], rightBottomdiv);
+	}
+
+	if (items[item.elements["Right"].valueHolder.value]) {
+		var capHeight = $(rightTopdiv).children().height() + $(rightBottomdiv).children().height();
+		var rightdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightMiddle").height($(middle).height() - capHeight);
+		viewers["Ui2DAnimation"](items[item.elements["Right"].valueHolder.value], rightdiv);
+	}
+	$(right).append(rightTopdiv).append(rightdiv).append(rightBottomdiv);
+
+	var middleEnds = ($(left).children().children().width() + $(right).children().children().width());
+
+	var middleMiddle = $($.parseHTML("<div/>")).addClass("piece")
+		.width($(location).width() - middleEnds).height($(middle).height());
+	if (items[item.elements["Middle"].valueHolder.value]) {
+		var div = $($.parseHTML("<div/>")).addClass("piece").attr("id", "MiddleMiddle")
+		.width($(middleMiddle).width()).height($(middleMiddle).height());
+		viewers["Ui2DAnimation"](items[item.elements["Middle"].valueHolder.value], div);
+		$(middleMiddle).append(div);
+	}
+	$(middle).append(left).append(middleMiddle).append(right);
+
+	$(location).append(top).append(middle).append(bottom);
+}
+
+/* TODO:
+|- Background
+|- BackgroundDrawType
+|- VSBTemplate
+|- HSBTemplate
+|- CloseBox
+|- QMarkBox
+|- MinimizeBox
+|- MaximizeBox
+|- TileBox
+|- Titlebar
+*/
+viewers["WindowDrawTemplate"] = function (item, location) {
+	var borderDiv = $($.parseHTML("<div/>")).addClass("frame");
+	$(borderDiv).height($(location).height()).width($(location).width());
+	viewers["FrameTemplate"](item.elements["Border"].valueHolder, borderDiv);
+	$(location).append(borderDiv);
+}
+
 /* TODO:
 Control
 |- Style_VScroll
@@ -189,7 +302,6 @@ Control
 |- Style_Border
 |- Style_Tooltip
 |- EQType
-|- DrawTemplate
 |- Layout
 Button
 |- UseCustomDisabledColor
@@ -202,6 +314,10 @@ Button
 viewers["Button"] = function (item, location) {
 	var div = $.parseHTML("<div/>");
 	$(div).css({ "position": "absolute" });
+
+	if (items[item.elements["DrawTemplate"].valueHolder.value]) {
+		viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], div);
+	}
 
 	// Make the text overlay.
 	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
@@ -304,7 +420,6 @@ Control
 |- Style_Border
 |- Style_Tooltip
 |- EQType
-|- DrawTemplate
 |- Layout
 */
 viewers["Gauge"] = function (item, location) {
@@ -315,6 +430,9 @@ viewers["Gauge"] = function (item, location) {
 		"top": item.elements["Location"].valueHolder.elements["Y"].valueHolder.value + "px"})
 		.width(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value)
 		.height(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value);
+	if (items[item.elements["DrawTemplate"].valueHolder.value]) {
+		viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], div);
+	}
 
 	// Make the text overlay.
 	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value + "</div>");
@@ -340,6 +458,8 @@ viewers["Gauge"] = function (item, location) {
 	}
 
 	$(gaugeDiv).find("#LinesFill").find("img").load(item.elements["LinesFillTint"].valueHolder.elements, function (color) {
+		var i = 0;
+		while (!this.complete && i < 10000) { i++; }
 		$(this).pixastic("coloradjust", {
 			red: color.data["R"].valueHolder.value / 255,
 			green: color.data["G"].valueHolder.value / 255,
@@ -348,6 +468,8 @@ viewers["Gauge"] = function (item, location) {
 	});
 
 	$(gaugeDiv).find("#Fill").find("img").load(item.elements["FillTint"].valueHolder.elements, function (color) {
+		var i = 0;
+		while (!this.complete && i < 10000) { i++; }
 		$(this).pixastic("coloradjust", {
 			red: color.data["R"].valueHolder.value / 255,
 			green: color.data["G"].valueHolder.value / 255,
@@ -421,6 +543,8 @@ viewers["Screen"] = function (item, location) {
 		})
 		.width(item.elements["Size"].valueHolder.elements["CX"].valueHolder.value)
 		.height(item.elements["Size"].valueHolder.elements["CY"].valueHolder.value);
+
+	viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], div);
 
 	// Make the text overlay.
 	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);

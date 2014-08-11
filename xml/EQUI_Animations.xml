@@ -297,7 +297,7 @@
 			<CY>256</CY>
 		</Size>
 	</TextureInfo>
-	<TextureInfo item="window_pieces05.tga">
+	<TextureInfo item="window_pieces05.png">
 		<Size>
 			<CX>256</CX>
 			<CY>256</CY>
@@ -6656,7 +6656,7 @@
 	<Ui2DAnimation item="A_ChatWindowTitleLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>131</X>
 				<Y>210</Y>
@@ -6669,7 +6669,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatWindowTitleMiddle">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>149</X>
 				<Y>210</Y>
@@ -6683,7 +6683,7 @@
 	<Ui2DAnimation item="A_ChatWindowTitleRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>164</X>
 				<Y>210</Y>
@@ -6696,7 +6696,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameTopLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>0</Y>
@@ -6709,7 +6709,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameTop">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>0</Y>
@@ -6722,7 +6722,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameTopRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>248</X>
 				<Y>0</Y>
@@ -6735,7 +6735,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameLeftTop">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>124</X>
 				<Y>210</Y>
@@ -6748,7 +6748,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameRightTop">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>178</X>
 				<Y>210</Y>
@@ -6761,7 +6761,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>124</X>
 				<Y>231</Y>
@@ -6774,7 +6774,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>178</X>
 				<Y>230</Y>
@@ -6787,7 +6787,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameLeftBottom">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>124</X>
 				<Y>245</Y>
@@ -6800,7 +6800,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameRightBottom">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>135</X>
 				<Y>238</Y>
@@ -6813,7 +6813,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameBottomLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>124</X>
 				<Y>245</Y>
@@ -6826,7 +6826,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameBottom">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>151</X>
 				<Y>246</Y>
@@ -6839,7 +6839,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBorderFrameBottomRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>178</X>
 				<Y>246</Y>
@@ -6853,7 +6853,7 @@
 	<!-- pieces inside chat windows -->
 	<Ui2DAnimation item="A_ChatInnerFrameTopLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>131</X>
 				<Y>226</Y>
@@ -6866,7 +6866,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameTopRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>131</X>
 				<Y>226</Y>
@@ -6879,7 +6879,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameTop">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>131</X>
 				<Y>226</Y>
@@ -6892,7 +6892,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>145</X>
 				<Y>238</Y>
@@ -6905,7 +6905,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>163</X>
 				<Y>238</Y>
@@ -6918,7 +6918,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameBottomLeft">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>145</X>
 				<Y>238</Y>
@@ -6931,7 +6931,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameBottomRight">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>154</X>
 				<Y>238</Y>
@@ -6944,7 +6944,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatInnerFrameBottom">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>160</X>
 				<Y>238</Y>
@@ -6958,7 +6958,7 @@
 	<!-- Chat Minimize Close Help Pieces -->
 	<Ui2DAnimation item="A_ChatMin">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>97</X>
 				<Y>234</Y>
@@ -6971,7 +6971,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatMinH">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>110</X>
 				<Y>235</Y>
@@ -6984,7 +6984,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatMinP">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>97</X>
 				<Y>234</Y>
@@ -6997,7 +6997,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatClose">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>49</X>
 				<Y>234</Y>
@@ -7010,7 +7010,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatCloseH">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>74</X>
 				<Y>235</Y>
@@ -7023,7 +7023,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatCloseP">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>61</X>
 				<Y>234</Y>
@@ -7037,7 +7037,7 @@
 	<!-- Chat Maximize Pieces -->
 	<Ui2DAnimation item="A_ChatMax">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>97</X>
 				<Y>234</Y>
@@ -7050,7 +7050,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatMaxH">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>110</X>
 				<Y>235</Y>
@@ -7063,7 +7063,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatMaxP">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>97</X>
 				<Y>234</Y>
@@ -7172,7 +7172,7 @@
 	<!-- Blank Piece -->
 	<Ui2DAnimation item="A_SmallBlank">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>0</Y>
@@ -7185,7 +7185,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_ChatBlank">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>38</X>
 				<Y>234</Y>
@@ -9573,7 +9573,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTopLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>191</X>
 				<Y>117</Y>
@@ -9592,7 +9592,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>206</X>
 				<Y>123</Y>
@@ -9611,7 +9611,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTopRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>219</X>
 				<Y>117</Y>
@@ -9630,7 +9630,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameRightTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>218</X>
 				<Y>117</Y>
@@ -9649,7 +9649,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>183</X>
 				<Y>206</Y>
@@ -9668,7 +9668,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameRightBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>183</X>
 				<Y>209</Y>
@@ -9687,7 +9687,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameRightTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>224</X>
 				<Y>117</Y>
@@ -9706,7 +9706,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>189</X>
 				<Y>206</Y>
@@ -9725,7 +9725,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameRightBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>189</X>
 				<Y>209</Y>
@@ -9744,7 +9744,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameBottomRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>218</X>
 				<Y>175</Y>
@@ -9763,7 +9763,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>210</X>
 				<Y>175</Y>
@@ -9782,7 +9782,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameBottomLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>192</X>
 				<Y>175</Y>
@@ -9801,7 +9801,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameLeftBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>181</X>
 				<Y>192</Y>
@@ -9820,7 +9820,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>181</X>
 				<Y>192</Y>
@@ -9839,7 +9839,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameLeftTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>192</X>
 				<Y>117</Y>
@@ -9858,7 +9858,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameLeftBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>181</X>
 				<Y>192</Y>
@@ -9877,7 +9877,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>181</X>
 				<Y>192</Y>
@@ -9896,7 +9896,7 @@
 	<Ui2DAnimation item="A_FiligreeThinFrameLeftTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>192</X>
 				<Y>117</Y>
@@ -9934,7 +9934,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTitleLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>235</X>
 				<Y>135</Y>
@@ -9953,7 +9953,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTitleMiddle">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>209</X>
 				<Y>123</Y>
@@ -9972,7 +9972,7 @@
 	<Ui2DAnimation item="A_FiligreeFrameTitleRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>235</X>
 				<Y>161</Y>
@@ -10683,7 +10683,7 @@
 	<Ui2DAnimation item="A_Filigree2TopLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>191</X>
 				<Y>117</Y>
@@ -10702,7 +10702,7 @@
 	<Ui2DAnimation item="A_Filigree2Top">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>206</X>
 				<Y>123</Y>
@@ -10721,7 +10721,7 @@
 	<Ui2DAnimation item="A_Filigree2TopRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>219</X>
 				<Y>117</Y>
@@ -10740,7 +10740,7 @@
 	<Ui2DAnimation item="A_Filigree2RightTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>43</X>
 				<Y>174</Y>
@@ -10759,7 +10759,7 @@
 	<Ui2DAnimation item="A_Filigree2Right">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>43</X>
 				<Y>185</Y>
@@ -10778,7 +10778,7 @@
 	<Ui2DAnimation item="A_Filigree2RightBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>43</X>
 				<Y>196</Y>
@@ -10797,7 +10797,7 @@
 	<Ui2DAnimation item="A_Filigree2BottomRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>43</X>
 				<Y>217</Y>
@@ -10816,7 +10816,7 @@
 	<Ui2DAnimation item="A_Filigree2Bottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>19</X>
 				<Y>217</Y>
@@ -10835,7 +10835,7 @@
 	<Ui2DAnimation item="A_Filigree2BottomLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>5</X>
 				<Y>217</Y>
@@ -10854,7 +10854,7 @@
 	<Ui2DAnimation item="A_Filigree2LeftBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>5</X>
 				<Y>196</Y>
@@ -10873,7 +10873,7 @@
 	<Ui2DAnimation item="A_Filigree2Left">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>5</X>
 				<Y>185</Y>
@@ -10892,7 +10892,7 @@
 	<Ui2DAnimation item="A_Filigree2LeftTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>5</X>
 				<Y>174</Y>
@@ -10930,7 +10930,7 @@
 	<Ui2DAnimation item="A_Filigree2TitleLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>21</X>
 				<Y>174</Y>
@@ -10949,7 +10949,7 @@
 	<Ui2DAnimation item="A_Filigree2TitleMiddle">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>30</X>
 				<Y>174</Y>
@@ -10968,7 +10968,7 @@
 	<Ui2DAnimation item="A_Filigree2TitleRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>34</X>
 				<Y>174</Y>
@@ -10988,7 +10988,7 @@
 	<Ui2DAnimation item="A_Filigree3TopLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>191</X>
 				<Y>117</Y>
@@ -11007,7 +11007,7 @@
 	<Ui2DAnimation item="A_Filigree3Top">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>206</X>
 				<Y>123</Y>
@@ -11026,7 +11026,7 @@
 	<Ui2DAnimation item="A_Filigree3TopRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>219</X>
 				<Y>117</Y>
@@ -11045,7 +11045,7 @@
 	<Ui2DAnimation item="A_Filigree3RightTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>232</X>
 				<Y>188</Y>
@@ -11064,7 +11064,7 @@
 	<Ui2DAnimation item="A_Filigree3Right">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>232</X>
 				<Y>237</Y>
@@ -11083,7 +11083,7 @@
 	<Ui2DAnimation item="A_Filigree3RightBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>183</X>
 				<Y>209</Y>
@@ -11102,7 +11102,7 @@
 	<Ui2DAnimation item="A_Filigree3BottomRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>232</X>
 				<Y>246</Y>
@@ -11121,7 +11121,7 @@
 	<Ui2DAnimation item="A_Filigree3Bottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>214</X>
 				<Y>246</Y>
@@ -11140,7 +11140,7 @@
 	<Ui2DAnimation item="A_Filigree3BottomLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>202</X>
 				<Y>246</Y>
@@ -11159,7 +11159,7 @@
 	<Ui2DAnimation item="A_Filigree3LeftBottom">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>181</X>
 				<Y>192</Y>
@@ -11178,7 +11178,7 @@
 	<Ui2DAnimation item="A_Filigree3Left">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>202</X>
 				<Y>238</Y>
@@ -11197,7 +11197,7 @@
 	<Ui2DAnimation item="A_Filigree3LeftTop">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>202</X>
 				<Y>188</Y>
@@ -11235,7 +11235,7 @@
 	<Ui2DAnimation item="A_Filigree3TitleLeft">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>216</X>
 				<Y>188</Y>
@@ -11254,7 +11254,7 @@
 	<Ui2DAnimation item="A_Filigree3TitleMiddle">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>221</X>
 				<Y>188</Y>
@@ -11273,7 +11273,7 @@
 	<Ui2DAnimation item="A_Filigree3TitleRight">
 		<Cycle>true</Cycle>
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>220</X>
 				<Y>188</Y>
@@ -15952,7 +15952,7 @@
 	<!-- ADDRESS BOOK BUTTON -->
 	<Ui2DAnimation item="A_AddressBookBtnNormal">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>60</X>
 				<Y>0</Y>
@@ -15969,7 +15969,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_AddressBookBtnFlyby">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>86</X>
 				<Y>0</Y>
@@ -15986,7 +15986,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_AddressBookBtnPressed">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>112</X>
 				<Y>0</Y>
@@ -16003,7 +16003,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_AddressBookBtnPressedFlyby">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>138</X>
 				<Y>0</Y>
@@ -16675,7 +16675,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_InvPowerSource">
 		<Frames>
-			<Texture>window_pieces05.tga</Texture>
+			<Texture>window_pieces05.png</Texture>
 			<Location>
 				<X>120</X>
 				<Y>80</Y>
