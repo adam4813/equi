@@ -306,9 +306,6 @@ Control
 |- EQType
 |- DrawTemplate
 |- Layout
-Gauge
-|- FillTint
-|- LinesFillTint
 */
 viewers["Gauge"] = function (item, location) {
 	var div = $.parseHTML("<div/>");
@@ -341,6 +338,25 @@ viewers["Gauge"] = function (item, location) {
 	if (item.elements["DrawLinesFill"].valueHolder.value == false) {
 		$(gaugeDiv).find("#LinesFill").hide();
 	}
+
+	$(gaugeDiv).find("#LinesFill").find("img").load(item.elements["LinesFillTint"].valueHolder.elements, function (color) {
+		$(this).pixastic("coloradjust", {
+			red: color.data["R"].valueHolder.value / 255,
+			green: color.data["G"].valueHolder.value / 255,
+			blue: color.data["B"].valueHolder.value / 255
+		});
+	});
+
+	$(gaugeDiv).find("#Fill").find("img").load(item.elements["FillTint"].valueHolder.elements, function (color) {
+		$(this).pixastic("coloradjust", {
+			red: color.data["R"].valueHolder.value / 255,
+			green: color.data["G"].valueHolder.value / 255,
+			blue: color.data["B"].valueHolder.value / 255
+		});
+	});
+	$("img").each(function () {
+		if (this.complete) $(this).load();
+	});
 
 	$(div).append(textDiv).append(gaugeDiv).attr("id", item.item);
 	$(location).append(div);
