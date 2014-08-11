@@ -1,25 +1,61 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<style>
+			* { /* This is a game, not a document.  If I want them I'll explicitly add them! */
+				padding: 0;
+				margin: 0;
+				border: 0;
+			}
+
+			div {
+				overflow: hidden;
+			}
+
+			div .gauge {
+				position: absolute;
+				line-height: 0;
+				font-size: 0;
+			}
+
+			div .gauge .piece {
+				display: inline-block;
+				position: relative;
+			}
+
+			div .gauge .bar {
+				position: absolute;
+				top: 0px;
+			}
+
+			div .label {
+				display: block;
+				position: absolute;
+				font-family: Arial, sans-serif;
+				font-size: 10px;
+				font-weight: bold;
+				text-shadow: 0px -1px 3px rgba(0, 0, 0, 1.0);
+			}
+		</style>
 		<title>EQUI Editor</title>
 		
 		<!-- jquery -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+		<script type="text/javascript" src="http://reckdesign.de/eComboBox/jquery.eComboBox.min.js"></script>
+		<script type="text/javascript" src="js/pixastic.js"></script>
+		<link rel=" stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	</head>
-	<body>
-		<div style="display:inline; float:left;" id="elementList">
+	<body bgcolor="#000000">
+		<div id="elementList">
 		</div>
-		<div style="display:inline; float:left;'" id="elementProperties">
+		<div style="display: inline-block; width: 15%; border: 2px solid black; float: left;" id="elementProperties">
 		</div>
-		<div style="display:inline; float:left;'" id="sidl">
-		</div>
-		<pre id="debug">
-		</pre>
+		<div style="display: inline; position:relative; width: 75%; height: 500px; border: 2px solid black; float: left;" id="renderView"></div>
 		<script src="js/SIDLParse.js"></script>
 		<script src="js/equi_parse.js"></script>
 		<script src="js/parsers.js"></script>
 		<script src="js/editors.js"></script>
+		<script src="js/renderers.js"></script>
 	</body>
 </html>
