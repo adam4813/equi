@@ -322,14 +322,12 @@ viewers["Gauge"] = function (item, location) {
 	// Make the text overlay.
 	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value + "</div>");
 	$(textDiv).css({
-		"position": "relative",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
 		"left": item.elements["TextOffsetX"].valueHolder.value,
 		"top": item.elements["TextOffsetY"].valueHolder.value,
-	});
-	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
+	}).addClass("label").attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
 	var gaugeDiv = $.parseHTML("<div/>");
 	$(gaugeDiv).addClass("gauge").css({
@@ -372,14 +370,17 @@ viewers["Label"] = function (item, location) {
 	} else if (item.elements["AlignRight"].valueHolder.value == true) {
 		align = "right";
 	}
+	var wrap = "normal";
+	if (item.elements["NoWrap"].valueHolder.value == true) {
+		wrap = "nowrap";
+	}
 	$(textDiv).css({
-		"position": "absolute",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", " +
 			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
 		"text-align": align,
-		"white-space": "nowrap"
-	}).attr("title", (item.elements["TooltipReference"].valueHolder.value));
+		"white-space": wrap
+	}).addClass("label").attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
 
 	var div = $.parseHTML("<div/>");
