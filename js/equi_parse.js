@@ -1,5 +1,5 @@
 items = [];
-items = [];
+images = {};
 
 $(function() {
 	sidl = {};

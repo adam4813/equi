@@ -1,3 +1,5 @@
+sidl_tree = [];
+
 function ParseSIDL() {
 	$.ajaxSetup({async:false});
 	$.get("xml/SIDL.xml", "xml")
@@ -25,11 +27,11 @@ function ParseSIDL() {
 			}
 
 			sidl["int"] =
-				{ type: "int", default: 0, isItem: false, isArray: false, value: 0 };
+				{ type: "int", default: 0, isItem: false, isArray: false, value: 0, super_type: ""};
 			sidl["string"] =
-				{ type: "string", default: "", isItem: false, isArray: false, value: "" };
+				{ type: "string", default: "Soandso", isItem: false, isArray: false, value: "", super_type: "" };
 			sidl["boolean"] =
-				{ type: "boolean", default: false, isItem: false, isArray: false, value: false };
+				{ type: "boolean", default: false, isItem: false, isArray: false, value: false, super_type: "" };
 
 			var rootElement = getChildElementNode(schema); // Get the first top level ElementType.
 			while (rootElement != null) {
@@ -42,6 +44,45 @@ function ParseSIDL() {
 					if (child.nodeName == "superType") {
 						var superType = child.attributes.item(0).value;
 						sidl[elementType] = $.extend(true, {}, sidl[superType]);
+						sidl[elementType].super_type = superType;
+						var parent_tree = new Array();
+						while (superType != "") {
+							parent_tree.push(superType);
+							if (sidl[superType].super_type != null) {
+								superType = sidl[superType].super_type;
+							}
+							else {
+								superType = "";
+							}
+						}
+						var child_leaf;
+						superType = parent_tree.pop();
+						if (sidl_tree[superType]) {
+							child_leaf = sidl_tree[superType];
+						}
+						else {
+							sidl_tree[superType] = {};
+							sidl_tree[superType].elements = sidl[superType].elements;
+						}
+						while (parent_tree.length > 0) {
+							var superType = parent_tree.pop();
+							if (child_leaf[superType]) {
+								child_leaf = child_leaf[superType];
+							}
+							else {
+								if (child_leaf) {
+									child_leaf[superType] = {};
+								}
+								else {
+									sidl_tree[superType] = {};
+									sidl_tree[superType].elements = sidl[superType].elements;
+								}
+							}
+						}
+						if (child_leaf) {
+							child_leaf[elementType] = {};
+							child_leaf[elementType].elements = sidl[elementType].elements;
+						}
 					}
 
 					if (child.nodeName == "element") {

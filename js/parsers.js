@@ -1,20 +1,35 @@
 parsers = [];
 
 parsers["string"] = function ParseString(node, target) {
-	target.value = node.innerHTML;
+	if (node.innerHTML != "") {
+		target.value = node.innerHTML;
+	}
+	else {
+		target.value = target.default;
+	}
 }
 
 parsers["int"] = function ParseInt(node, target) {
-	target.value = parseInt(node.innerHTML);
+	if (node.innerHTML != "") {
+		target.value = parseInt(node.innerHTML);
+	}
+	else {
+		target.value = target.default;
+	}
 }
 
 parsers["boolean"] = function ParseBoolean(node, target) {
-	target.value = (node.innerHTML.toLowerCase() === 'true');
+	if (node.innerHTML != "") {
+		target.value = (node.innerHTML.toLowerCase() === 'true');
+	}
+	else {
+		target.value = target.default;
+	}
 }
 
 parsers["Point"] = function ParsePoint(node, target) {
-	if (node.getElementsByTagName("X").length > 0) { target.elements["X"].valueHolder.value = node.getElementsByTagName("X")[0].firstChild.nodeValue; }
-	if (node.getElementsByTagName("Y").length > 0) { target.elements["Y"].valueHolder.value = node.getElementsByTagName("Y")[0].firstChild.nodeValue; }
+	if (node.getElementsByTagName("X").length > 0) { target.elements["X"].valueHolder.value = parseInt(node.getElementsByTagName("X")[0].firstChild.nodeValue); }
+	if (node.getElementsByTagName("Y").length > 0) { target.elements["Y"].valueHolder.value = parseInt(node.getElementsByTagName("Y")[0].firstChild.nodeValue); }
 }
 
 parsers["Size"] = function ParseSize(node, target) {
