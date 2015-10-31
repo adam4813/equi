@@ -12,33 +12,38 @@ viewers["TextureInfo"] = function (item, location) {
 */
 viewers["Frame"] = function (item, location) {
 	var img = $.parseHTML("<img src='img/" + item.elements["Texture"].valueHolder.value + "'/>");
-	var loc = item.elements["Location"].valueHolder;
-	var size = item.elements["Size"].valueHolder;
-	var width = $(location).width();
-	var height = $(location).height();
+	$(img).one("load", function() {
+		var loc = item.elements["Location"].valueHolder;
+		var size = item.elements["Size"].valueHolder;
+		var width = $(location).width();
+		var height = $(location).height();
 
-	// If there isn't a defined width/height we will use the frame's width/height.
-	if (width == 0) {
-		width = parseInt(size.elements["CX"].valueHolder.value);
-	}
-	if (height == 0) {
-		height = parseInt(size.elements["CY"].valueHolder.value);
-	}
+		// If there isn't a defined width/height we will use the frame's width/height.
+		if (width == 0) {
+			width = parseInt(size.elements["CX"].valueHolder.value);
+		}
+		if (height == 0) {
+			height = parseInt(size.elements["CY"].valueHolder.value);
+		}
 
-	// Determine the scaling factor that needs to be applied to match the width/height.
-	var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
-	var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
+		// Determine the scaling factor that needs to be applied to match the width/height.
+		var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
+		var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
 
-	$(img).css({
-		"position": "absolute",
-		"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
-		"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * scaleY) + "px",
-		"z-index": "-1",
-		"user-select": "none",
-		"width": img[0].width * scaleX + "px",
-		"height": img[0].height * scaleY + "px",
+		$(img).css({
+			"position": "absolute",
+			"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
+			"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * scaleY) + "px",
+			"z-index": "-1",
+			"user-select": "none",
+			"width": img[0].width * scaleX + "px",
+			"height": img[0].height * scaleY + "px",
+		});
+
+		$(location).append(img).width(width).height(height);
+	}).each(function() {
+	  if(this.complete) $(this).load();
 	});
-	$(location).append(img).width(width).height(height);
 };
 
 /* TODO:
@@ -107,14 +112,18 @@ viewers["ButtonDrawTemplate"] = function (item, location) {
 	$(location).mousedown(function () {
 		if ($(this).find("#Pressed").length > 0) {
 			$(this).find("#Pressed").show();
+			$(this).find("#PressedDecal").show();
 			$(this).find("#Normal").hide();
+			$(this).find("#NormalDecal").hide();
 		}
 		$(this).find("#Flyby").hide();
 	}).mouseup(function () {
 		// We must reference Checkbox_State to ensure proper behavior (set in Button).
 		if (location["Checkbox_State"] == true) { return; }
 		$(this).find("#Pressed").hide();
+		$(this).find("#PressedDecal").hide();
 		$(this).find("#Normal").show();
+		$(this).find("#NormalDecal").show();
 		$(this).mouseenter();
 	}).mouseenter(function () {
 		if (($(this).find("#Pressed").length > 0) ? ($(this).find("#Pressed").css("display") == "none") : true) {
@@ -259,7 +268,7 @@ viewers["FrameTemplate"] = function (item, location) {
 
 	var middleEnds = ($(left).children().children().width() + $(right).children().children().width());
 
-	var middleMiddle = $($.parseHTML("<div/>")).addClass("piece")
+	var middleMiddle = $($.parseHTML("<div/>")).addClass("piece").attr("id", "MiddleMiddle")
 		.width($(location).width() - middleEnds).height($(middle).height());
 	if (items[item.elements["Middle"].valueHolder.value]) {
 		var div = $($.parseHTML("<div/>")).addClass("piece").attr("id", "MiddleMiddle")
@@ -312,8 +321,41 @@ Button
 |- SoundFlyby
 */
 viewers["Button"] = function (item, location) {
+	var left = parseInt(item.elements["Location"].valueHolder.elements["X"].valueHolder.value);
+	var top = parseInt(item.elements["Location"].valueHolder.elements["Y"].valueHolder.value);
+	var width = item.elements["Size"].valueHolder.elements["CX"].valueHolder.value;
+	var height = item.elements["Size"].valueHolder.elements["CY"].valueHolder.value;
+	var decal_x = item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value;
+	var decal_y = item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value;
+	var anchor_left = item.elements["LeftAnchorOffset"].valueHolder.value;
+	var anchor_top = item.elements["TopAnchorOffset"].valueHolder.value;
+	var anchor_right = item.elements["RightAnchorOffset"].valueHolder.value;
+	var anchor_bottom = item.elements["BottomAnchorOffset"].valueHolder.value;
+	if (item.elements["TopAnchorToTop"].valueHolder.value == true) {
+		top += anchor_top;
+	}
+	else {
+		
+	}
+
+	if (item.elements["BottomAnchorToTop"].valueHolder.value == true) {
+		if (anchor_bottom > 0) {
+			width = anchor_bottom;
+		}
+	}
+	if (width < decal_x) {
+		width = decal_x;
+	}
+	if (height < decal_y) {
+		height = decal_y;
+	}
 	var div = $.parseHTML("<div/>");
-	$(div).css({ "position": "absolute" });
+	$(div).css({ "position": "absolute",
+		"left": left + "px",
+		"top": top + "px",
+		"width": width + "px",
+		"height": height + "px",
+		});
 
 	if (items[item.elements["DrawTemplate"].valueHolder.value]) {
 		viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], div);
@@ -333,12 +375,12 @@ viewers["Button"] = function (item, location) {
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
 			item.elements["TextColor"].valueHolder.elements["G"].valueHolder.value + ", "+
 			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
-		"left": item.elements["TextOffsetX"].valueHolder.value,
-		"top": item.elements["TextOffsetY"].valueHolder.value,
+		"left": item.elements["TextOffsetX"].valueHolder.value + "px",
+		"top": item.elements["TextOffsetY"].valueHolder.value + "px",
 		"text-align": align,
 		"vertical-align": (item.elements["TextAlignVCenter"].valueHolder.value == "true") ? "middle" : "initial",
-		"width": item.elements["Size"].valueHolder.elements["CX"].valueHolder.value + "px",
-		"height": item.elements["Size"].valueHolder.elements["CY"].valueHolder.value + "px"
+		"width": width + "px",
+		"height": height + "px"
 	});
 	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
@@ -547,7 +589,7 @@ viewers["Screen"] = function (item, location) {
 	viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], div);
 
 	// Make the text overlay.
-	var textDiv = $.parseHTML("<div id='Text'>" + item.elements["Text"].valueHolder.value);
+	var textDiv = $.parseHTML("<div id='Text' class='label'>" + item.elements["Text"].valueHolder.value);
 	$(textDiv).css({
 		"position": "absolute",
 		"color": "rgb(" + item.elements["TextColor"].valueHolder.elements["R"].valueHolder.value + ", " +
@@ -555,12 +597,13 @@ viewers["Screen"] = function (item, location) {
 			item.elements["TextColor"].valueHolder.elements["B"].valueHolder.value + ")",
 	}).attr("title", (item.elements["TooltipReference"].valueHolder.value));
 
-	$(div).append(textDiv);
+	var middleMiddleDiv = $(div).find("#MiddleMiddle");
+	$(middleMiddleDiv).append(textDiv);
 	for (var i = 0; i < item.elements["Pieces"].valueHolder.length; i++) {
 		if (viewers[items[item.elements["Pieces"].valueHolder[i].value].type]) {
 			//var pieceDiv = $.parseHTML("<div/>");
 			//$(pieceDiv).css({ "position": "absolute", "overflow": "hidden" });
-			viewers[items[item.elements["Pieces"].valueHolder[i].value].type](items[item.elements["Pieces"].valueHolder[i].value], div);
+			viewers[items[item.elements["Pieces"].valueHolder[i].value].type](items[item.elements["Pieces"].valueHolder[i].value], middleMiddleDiv);
 			//$(div).append(pieceDiv);
 		}
 	}

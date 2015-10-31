@@ -1713,7 +1713,7 @@
 			<CY>64</CY>
 		</Size>
 	</TextureInfo>
-	<TextureInfo item="grouprole.tga">
+	<TextureInfo item="grouprole.png">
 		<Size>
 			<CX>64</CX>
 			<CY>128</CY>
@@ -21170,7 +21170,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_Tank">
 		<Frames>
-			<Texture>grouprole.tga</Texture>
+			<Texture>grouprole.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>0</Y>
@@ -21183,7 +21183,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_Assist">
 		<Frames>
-			<Texture>grouprole.tga</Texture>
+			<Texture>grouprole.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>20</Y>
@@ -21196,7 +21196,7 @@
 	</Ui2DAnimation>
 	<Ui2DAnimation item="A_Puller">
 		<Frames>
-			<Texture>grouprole.tga</Texture>
+			<Texture>grouprole.png</Texture>
 			<Location>
 				<X>0</X>
 				<Y>60</Y>
