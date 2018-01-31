@@ -1,5 +1,5 @@
 items = [];
-items = [];
+files = [];
 sidl = {};
 images = {};
 
@@ -10,12 +10,14 @@ $(function() {
 function sidlLoaded() {
 	addToFileTree("EQUI_Animations");
 	parseXML("EQUI_Animations");
+	addToFileTree("EQUI_Templates");
+	parseXML("EQUI_Templates");
 	addToFileTree("EQUI_PlayerWindow");
 	parseXML("EQUI_PlayerWindow");
 }
 
 function parseXML(filename) {
-	$.get("xml/" + filename, "xml")
+	$.get("xml/" + filename + ".xml", "xml")
 		.done(
 			function (xml) {
 				var root = getChildElementNode(xml);
@@ -38,29 +40,84 @@ function parseXML(filename) {
 				} else {
 					console.log("Schema should read: '<Schema xmlns=\"EverQuestData\" xmlns:dt=\"EverQuestDataTypes\" />'");
 				}
+				files[filename] = {elements: []};
 				next = getSiblingElementNode(schema);
 				while (next != null) {
 					current = next;
 					next = getSiblingElementNode(next);
-					items[current.attributes.item(0).value] = $.extend(true, {}, sidl[current.nodeName]);
-					items[current.attributes.item(0).value].type = current.nodeName;
-					items[current.attributes.item(0).value].item = current.attributes.item(0).value;
-					parseNode(current, items[current.attributes.item(0).value]);
+					var newItem = $.extend(true, {}, sidl[current.nodeName]);
+					files[filename].elements[current.attributes.item(0).value] = items[current.attributes.item(0).value] = newItem;
+					newItem.type = current.nodeName;
+					newItem.item = current.attributes.item(0).value;
+					parseNode(current, newItem);
 				}
 			}
 		);
 }
 
-function populateElementList() {
-	// Add a select to choose the element to view.
-	$("#elementList").append($(document.createElement("select"))).change(function() { showElementProperties($("#elementList > select option:selected").val()); });
+function addToFileTree(filename) {
+	var div = $(document.createElement("div")).attr("id", filename);
+	$(div).addClass("inlineChildren header")
+		.click({filename: filename}, function(data) {
+			var self = $(this);
+			if (data.target == this) {
+				self.find("> :first").toggle();
+			}
+			if (!self.data("populated")) {
+				populateFileElements(data.data.filename);
+				self.data("populated", true);
+				self.find("> :first").show();
+			}
+		})
+		.text(filename)
+		.append($(document.createElement("div")).attr("id", filename + "ItemList"));
+	$("#fileTree").append($(div));
+}
 
-	// Populate the list
-	var select = $("#elementList > select");
-	for (var item in items) {
-		$(select).append($(document.createElement("option")).val(item).text(item));
+function populateFileTree() {
+	for (var file in files) {
+		addToFileTree(file);
 	}
-	showElementProperties($("#elementList > :first").val());
+}
+
+function populateFileElements(filename) {
+	var parent = $("#" + filename + "ItemList");
+	
+	// Presort based on element type
+	var itemsByType = [];
+	for (var element in files[filename].elements) {
+		if (typeof itemsByType[items[element].type] === "undefined") {
+			itemsByType[items[element].type] = [];
+		}
+		itemsByType[items[element].type].push(element);
+	}
+	
+	// Populate divs
+	for (var type in itemsByType) {
+		var typeDiv = $("<div />").text(type).addClass("fileElementsContainer");
+		var itemDiv = $("<div />").hide().addClass("fileElementsList");
+		typeDiv.append($(itemDiv))
+			.click(function(data) {
+				if (data.target == this) {
+					$(this).find("> :first").toggle();
+				}
+			});
+		parent.append($(typeDiv));
+		for (var index in itemsByType[type]) {
+			var element = itemsByType[type][index];
+			itemDiv.append(
+				$("<div />")
+					.text(element)
+					.click({element: element}, function(data) {
+						showElementProperties(data.data.element);
+					})
+			);
+		}
+	}
+}
+
+function hideFileItems(filename) {
+	$("#" + filename + "ItemList").empty();
 }
 
 function showElementProperties(item) {
@@ -84,24 +141,23 @@ function showElementProperties(item) {
 		viewers["Screen"](items[item], "#renderView");
 	} else if (items[item].type == "WindowDrawTemplate") {
 		viewers["WindowDrawTemplate"](items[item], "#renderView");
-	} else {
-		for (var key in items[item].elements) {
-			var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
-				function (data) {
-					if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
-						editors["Template"](data.data.key, data.data.value, data.data.value.type);
-					} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
-						editors["string"](data.data.key, data.data.value);
-					} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
-						editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
-					} else if (editors[data.data.value.type]) {
-						editors[data.data.value.type](data.data.key, data.data.value);
-					}
-				});
-			$(div).text(key).append($(document.createElement("br")));
+	}
+	for (var key in items[item].elements) {
+		var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
+			function (data) {
+				if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
+					editors["Template"](data.data.key, data.data.value, data.data.value.type);
+				} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
+					editors["string"](data.data.key, data.data.value);
+				} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
+					editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
+				} else if (editors[data.data.value.type]) {
+					editors[data.data.value.type](data.data.key, data.data.value);
+				}
+			});
+		$(div).text(key).append($(document.createElement("br")));
 
-			$("#elementProperties").append($(div));
-		}
+		$("#elementProperties").append($(div));
 	}
 }
 

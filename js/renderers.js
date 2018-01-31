@@ -10,7 +10,6 @@ function fixFileExt(filename) {
 
 viewers["TextureInfo"] = function (item, location) {
 	var img = $.parseHTML("<img src='img/" + fixFileExt(item.item) + "'/>");
-	$(img).css("z-index", -1);
 	$(location).append(img);
 }
 
