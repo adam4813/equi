@@ -1,16 +1,18 @@
 items = [];
+items = [];
+sidl = {};
 images = {};
 
 $(function() {
-	sidl = {};
-	ParseSIDL();
-	$.ajaxSetup({ async: false });
-	parseXML("EQUI_Animations.xml");
-	parseXML("EQUI_Templates.xml");
-	parseXML("EQUI_PlayerWindow.xml");
-	$.ajaxSetup({ async: false });
-	populateElementList();
+	parseSIDL(sidlLoaded);
 });
+
+function sidlLoaded() {
+	addToFileTree("EQUI_Animations");
+	parseXML("EQUI_Animations");
+	addToFileTree("EQUI_PlayerWindow");
+	parseXML("EQUI_PlayerWindow");
+}
 
 function parseXML(filename) {
 	$.get("xml/" + filename, "xml")
@@ -105,6 +107,9 @@ function showElementProperties(item) {
 
 function parseNode(node, parent) {
 	var name = node.nodeName;
+	if (name === "TextureInfo") {
+		viewers["TextureInfo"]({item: node.attributes[0].nodeValue}, "#preload");
+	}
 	for (var i = 0; i < node.childNodes.length; i++) {
 		if (node.childNodes[i].nodeType == 1) {
 			var sidlNode = sidl[name].elements[node.childNodes[i].nodeName];

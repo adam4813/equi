@@ -1,7 +1,6 @@
 sidl_tree = [];
 
-function ParseSIDL() {
-	$.ajaxSetup({async:false});
+function parseSIDL(cb) {
 	$.get("xml/SIDL.xml", "xml")
 	.done(
 		function(xml) {
@@ -130,7 +129,7 @@ function ParseSIDL() {
 
 				rootElement = getSiblingElementNode(rootElement); // Get the next top level ElementType.
 			}
+			cb();
 		}
 	);
-	$.ajaxSetup({ async: true });
 }

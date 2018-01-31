@@ -1,7 +1,16 @@
 viewers = {};
 
+function fixFileExt(filename) {
+	var ret = filename;
+	if (filename.indexOf("tga") > 0 || filename.indexOf("dds") > 0) {
+		ret = filename.replace(/(.*)\.(.*?)$/, "$1.png")
+	}
+	return ret;
+}
+
 viewers["TextureInfo"] = function (item, location) {
-	var img = $.parseHTML("<img src='img/" + item.item + "'/>");
+	var img = $.parseHTML("<img src='img/" + fixFileExt(item.item) + "'/>");
+	$(img).css("z-index", -1);
 	$(location).append(img);
 }
 
@@ -11,7 +20,7 @@ viewers["TextureInfo"] = function (item, location) {
 |- Specular
 */
 viewers["Frame"] = function (item, location) {
-	var img = $.parseHTML("<img src='img/" + item.elements["Texture"].valueHolder.value + "'/>");
+	var img = $.parseHTML("<img src='img/" + fixFileExt(item.elements["Texture"].valueHolder.value) + "'/>");
 	$(img).one("load", function() {
 		var loc = item.elements["Location"].valueHolder;
 		var size = item.elements["Size"].valueHolder;
