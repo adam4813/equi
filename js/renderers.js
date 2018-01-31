@@ -290,7 +290,6 @@ viewers["FrameTemplate"] = function (item, location) {
 }
 
 /* TODO:
-|- Background
 |- BackgroundDrawType
 |- VSBTemplate
 |- HSBTemplate
@@ -305,6 +304,11 @@ viewers["WindowDrawTemplate"] = function (item, location) {
 	var borderDiv = $($.parseHTML("<div/>")).addClass("frame");
 	$(borderDiv).height($(location).height()).width($(location).width());
 	viewers["FrameTemplate"](item.elements["Border"].valueHolder, borderDiv);
+	$(borderDiv).find("#MiddleMiddle")
+		.css(
+			{"background-image": 'url(img/' + fixFileExt(item.elements["Background"].valueHolder.value) + ')',
+			"z-index": 1}
+		);
 	$(location).append(borderDiv);
 }
 
@@ -335,27 +339,46 @@ viewers["Button"] = function (item, location) {
 	var height = item.elements["Size"].valueHolder.elements["CY"].valueHolder.value;
 	var decal_x = item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value;
 	var decal_y = item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value;
-	var anchor_left = item.elements["LeftAnchorOffset"].valueHolder.value;
-	var anchor_top = item.elements["TopAnchorOffset"].valueHolder.value;
-	var anchor_right = item.elements["RightAnchorOffset"].valueHolder.value;
-	var anchor_bottom = item.elements["BottomAnchorOffset"].valueHolder.value;
-	if (item.elements["TopAnchorToTop"].valueHolder.value == true) {
-		top += anchor_top;
-	}
-	else {
-		
-	}
 
-	if (item.elements["BottomAnchorToTop"].valueHolder.value == true) {
-		if (anchor_bottom > 0) {
-			width = anchor_bottom;
+	if (item.elements["AutoStretch"].valueHolder.value === true) {
+		width = $(location).width();
+		height = $(location).height();
+
+		var anchor_top_offset = item.elements["TopAnchorOffset"].valueHolder.value;
+		if (item.elements["TopAnchorToTop"].valueHolder.value) {
+			top = anchor_top_offset;
+		} else {
+			top = height - anchor_top_offset;
+		}
+
+		var anchor_bottom_offset = item.elements["BottomAnchorOffset"].valueHolder.value;
+		if (item.elements["BottomAnchorToTop"].valueHolder.value) {
+			height = anchor_bottom_offset;
+		} else {
+			height = height - anchor_bottom_offset - top;
+		}
+
+		var anchor_left_offset = item.elements["LeftAnchorOffset"].valueHolder.value;
+		if (item.elements["LeftAnchorToLeft"].valueHolder.value) {
+			left = anchor_left_offset;
+		} else {
+			left = width - anchor_left_offset;
+		}
+		
+		var anchor_righ_offsett = item.elements["RightAnchorOffset"].valueHolder.value;
+		if (item.elements["RightAnchorToLeft"].valueHolder.value) {
+			width = anchor_righ_offsett;
+		} else {
+			width = width - anchor_righ_offsett - left;
 		}
 	}
-	if (width < decal_x) {
-		width = decal_x;
-	}
-	if (height < decal_y) {
-		height = decal_y;
+	else {
+		if (width < decal_x) {
+			width = decal_x;
+		}
+		if (height < decal_y) {
+			height = decal_y;
+		}
 	}
 	var div = $.parseHTML("<div/>");
 	$(div).css({ "position": "absolute",
