@@ -36,7 +36,7 @@ editors["Point"] = function (name, target) {
 	$(div).dialog("open");
 }
 
-editors["Size"] = function (name, target) {
+editors["Size"] = function (name, target, targetDiv) {
 	var x = target.valueHolder.elements["CX"].valueHolder.value;
 	var y = target.valueHolder.elements["CY"].valueHolder.value;
 
@@ -62,6 +62,7 @@ editors["Size"] = function (name, target) {
 			Ok: function () {
 				target.valueHolder.elements["CX"].valueHolder.value = $(this).find("#x").text();
 				target.valueHolder.elements["CY"].valueHolder.value = $(this).find("#y").text();
+				targetDiv.updateSize();
 				$(this).dialog("close");
 			},
 			Cancel: function () {

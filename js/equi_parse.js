@@ -64,9 +64,13 @@ function addToFileTree(filename) {
 				self.find("> :first").toggle();
 			}
 			if (!self.data("populated")) {
-				populateFileElements(data.data.filename);
+				self.data("screenElement", populateFileElements(data.data.filename));
 				self.data("populated", true);
 				self.find("> :first").show();
+			}
+			if (self.data("screenElement") !== undefined) {
+				targetDiv = viewers["Screen"](items[self.data("screenElement")], "#renderView");
+				$("#renderView").empty().append(targetDiv);
 			}
 		})
 		.text(filename)
@@ -82,14 +86,20 @@ function populateFileTree() {
 
 function populateFileElements(filename) {
 	var parent = $("#" + filename + "ItemList");
+	let screenElement;
 	
 	// Presort based on element type
 	var itemsByType = [];
 	for (var element in files[filename].elements) {
-		if (typeof itemsByType[items[element].type] === "undefined") {
-			itemsByType[items[element].type] = [];
+		if (items[element].type == "Screen") {
+			screenElement = element;
 		}
-		itemsByType[items[element].type].push(element);
+		else {
+			if (typeof itemsByType[items[element].type] === "undefined") {
+				itemsByType[items[element].type] = [];
+			}
+			itemsByType[items[element].type].push(element);
+		}
 	}
 	
 	// Populate divs
@@ -114,6 +124,7 @@ function populateFileElements(filename) {
 			);
 		}
 	}
+	return screenElement;
 }
 
 function hideFileItems(filename) {
@@ -124,47 +135,52 @@ function showElementProperties(item) {
 	var proplist = document.getElementById("elementProperties");
 	$(document.getElementById("renderView")).empty();
 	$(proplist).empty();
+	var targetDiv;
 	if (items[item].type == "Button") {
-		viewers["Button"](items[item], "#renderView");
+		targetDiv = viewers["Button"](items[item], "#renderView");
 	} else if (items[item].type == "TextureInfo") {
-		viewers["TextureInfo"](items[item], "#renderView");
+		targetDiv = viewers["TextureInfo"](items[item], "#renderView");
 	} else if (items[item].type == "Ui2DAnimation") {
 		// We must do this specific for raw Ui2DAnimation to get it to size the parent element correctly.
 		var imgDiv = $.parseHTML("<div width='0px' height='0px'/>");
-		viewers["Ui2DAnimation"](items[item], imgDiv);
-		$("#renderView").append(imgDiv);
+		targetDiv = viewers["Ui2DAnimation"](items[item], imgDiv);
 	} else if (items[item].type == "Gauge") {
-		viewers["Gauge"](items[item], "#renderView");
+		targetDiv = viewers["Gauge"](items[item], "#renderView");
 	} else if (items[item].type == "Label") {
-		viewers["Label"](items[item], "#renderView");
+		targetDiv = viewers["Label"](items[item], "#renderView");
 	} else if (items[item].type == "Screen") {
-		viewers["Screen"](items[item], "#renderView");
+		targetDiv = viewers["Screen"](items[item], "#renderView");
 	} else if (items[item].type == "WindowDrawTemplate") {
-		viewers["WindowDrawTemplate"](items[item], "#renderView");
+		targetDiv = viewers["WindowDrawTemplate"](items[item], "#renderView", true);
+	}
+	$("#renderView").append(targetDiv);
+	if (targetDiv === "undefined") {
+		console.log(item[item].type);
 	}
 	for (var key in items[item].elements) {
-		var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key] },
+		var div = $(document.createElement("div")).attr("id", item + key).click({ key: key, value: items[item].elements[key], target: targetDiv },
 			function (data) {
 				if ((data.data.value.type.search("Template") > -1) && !(data.data.value.isItem)) {
-					editors["Template"](data.data.key, data.data.value, data.data.value.type);
+					editors["Template"](data.data.key, data.data.value, data.data.value.type, data.data.target);
 				} else if ((data.data.value.isItem) && (!data.data.value.isArray)) {
-					editors["string"](data.data.key, data.data.value);
+					editors["string"](data.data.key, data.data.value, data.data.target);
 				} else if ((data.data.value.isItem) && (data.data.value.isArray)) {
-					editors["itemArray"](data.data.key, data.data.value, data.data.value.type);
+					editors["itemArray"](data.data.key, data.data.value, data.data.value.type, data.data.target);
 				} else if (editors[data.data.value.type]) {
-					editors[data.data.value.type](data.data.key, data.data.value);
+					editors[data.data.value.type](data.data.key, data.data.value, data.data.target);
 				}
 			});
 		$(div).text(key).append($(document.createElement("br")));
 
-		$("#elementProperties").append($(div));
+		$(proplist).append($(div));
 	}
 }
 
 function parseNode(node, parent) {
 	var name = node.nodeName;
 	if (name === "TextureInfo") {
-		viewers["TextureInfo"]({item: node.attributes[0].nodeValue}, "#preload");
+		let img = viewers["TextureInfo"]({item: node.attributes[0].nodeValue}, "#preload");
+		$("#preload").append(img);
 	}
 	for (var i = 0; i < node.childNodes.length; i++) {
 		if (node.childNodes[i].nodeType == 1) {
