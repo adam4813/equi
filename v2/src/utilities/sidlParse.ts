@@ -1,4 +1,4 @@
-export class SidlType {
+export class SidlType implements ISidlType {
   name!: string;
   superType: SidlType | undefined;
   _properties: SidlProp[] = [];

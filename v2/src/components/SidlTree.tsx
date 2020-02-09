@@ -34,6 +34,25 @@ const SidlTree: React.FC<{ sidl: Map<string, SidlType> }> = ({ sidl }) => (
                     <Box>Is array: {property.isArray ? "true" : "false"}</Box>
                     <Box>Is item: {property.isItem ? "true" : "false"}</Box>
                     <Box>Default Value: {property.defaultValue}</Box>
+                    <Box>Type: {property.type?.name}</Box>
+                    {property.type?.properties.map(typeProperty=> (
+                        <Accordion allowMultiple key={typeProperty.name}>
+                          <AccordionItem>
+                            <AccordionHeader>
+                              <Box flex="1" textAlign="left">
+                                {typeProperty.name}
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel pb={4}>
+                              <Box>Is array: {typeProperty.isArray ? "true" : "false"}</Box>
+                              <Box>Is item: {typeProperty.isItem ? "true" : "false"}</Box>
+                              <Box>Default Value: {typeProperty.defaultValue}</Box>
+                              <Box>Type: {typeProperty.type?.name}</Box>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                    ))}
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
