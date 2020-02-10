@@ -1,4 +1,4 @@
-export class SidlType implements ISidlType {
+class SidlType implements ISidlType {
   name!: string;
   superType: SidlType | undefined;
   _properties: SidlProp[] = [];
@@ -26,42 +26,50 @@ function initSidlBaseElementTypes(SIDL: Map<string, SidlType>) {
   SIDL.set("boolean", booleanSidlType);
 }
 
-function parseSidlElementProp(propNode: Element, SIDL: Map<string, SidlType>): SidlProp {
+function parseSidlElementProp(
+  propRootElement: Element,
+  SIDL: Map<string, SidlType>
+): SidlProp {
   // TODO: store this to validate later when editing
-  const minOccurs = propNode.attributes.getNamedItem("minOccurs")?.value;
-  //const maxOccurs = propNode.attributes.getNamedItem("maxOccurs")?.value;
+  const minOccurs = propRootElement.attributes.getNamedItem("minOccurs")?.value;
+  //const maxOccurs = propRootElement.attributes.getNamedItem("maxOccurs")?.value;
 
-  let type = propNode.attributes.getNamedItem("type")?.value ?? "";
+  let typeName = propRootElement.attributes.getNamedItem("type")?.value ?? "";
   let isItem = false;
-  if (type.indexOf(":item") > -1) {
+  if (typeName.indexOf(":item") > -1) {
     isItem = true;
-    type = type.split(":")[0];
+    typeName = typeName.split(":")[0];
   }
 
   return {
-    name: propNode.attributes.getNamedItem("name")?.value ?? "",
-    type: SIDL.get(type),
+    name: propRootElement.attributes.getNamedItem("name")?.value ?? "",
+    type: SIDL.get(typeName),
     isItem,
     isArray: !!minOccurs,
-    defaultValue: propNode?.firstElementChild?.innerHTML
+    defaultValue: propRootElement?.firstElementChild?.innerHTML
   };
 }
 
-function parseSidlElementType(elementNode: Element, SIDL: Map<string, SidlType>) {
-  let element: SidlType = new SidlType();
-  element.name = elementNode.attributes.getNamedItem("name")?.value ?? "";
+function parseSidlElementType(
+  rootElement: Element,
+  SIDL: Map<string, SidlType>
+) {
+  const element: SidlType = new SidlType();
+  element.name = rootElement.attributes.getNamedItem("name")?.value ?? "";
 
-  let child = elementNode.firstElementChild;
+  let child = rootElement.firstElementChild;
   while (child !== null) {
-    if (child.nodeName === "superType") {
+    if (child.tagName === "superType") {
       const superType = child.attributes.getNamedItem("type")?.value;
 
       if (superType && SIDL.has(superType)) {
         element.superType = SIDL.get(superType);
       }
-    } else if (child.nodeName === "element" || child.nodeName === "attribute") {
+    } else if (child.tagName === "element" || child.tagName === "attribute") {
       const prop = parseSidlElementProp(child, SIDL);
-      if (!element.properties.find(elementProp => elementProp.name === prop.name)) {
+      if (
+        !element.properties.find(elementProp => elementProp.name === prop.name)
+      ) {
         element.addProperty(prop);
       }
     }
@@ -72,13 +80,13 @@ function parseSidlElementType(elementNode: Element, SIDL: Map<string, SidlType>)
 }
 
 function validateFileMeta(sidlDoc: XMLDocument) {
-  const rootNode = (sidlDoc.getRootNode() as XMLDocument).firstElementChild;
-  if (rootNode === null) {
-    console.log("Can't find XML root node.");
+  const rootElement = (sidlDoc.getRootNode() as XMLDocument).firstElementChild;
+  if (rootElement === null) {
+    console.log("Can't find XML root element.");
     return false;
   }
   if (
-    rootNode.attributes.getNamedItem("ID")?.value ===
+    rootElement.attributes.getNamedItem("ID")?.value ===
     "EQInterfaceDefinitionLanguage"
   ) {
     console.log("Valid XML ID.");
@@ -89,14 +97,14 @@ function validateFileMeta(sidlDoc: XMLDocument) {
     return false;
   }
 
-  const schemaNode = rootNode.firstElementChild;
-  if (schemaNode === null) {
-    console.log("Can't find Schema node.");
+  const schemaElement = rootElement.firstElementChild;
+  if (schemaElement === null) {
+    console.log("Can't find Schema element.");
     return false;
   }
   if (
-    schemaNode.attributes.getNamedItem("xmlns")?.value === "EverQuestData" &&
-    schemaNode.attributes.getNamedItem("xmlns:dt")?.value ===
+    schemaElement.attributes.getNamedItem("xmlns")?.value === "EverQuestData" &&
+    schemaElement.attributes.getNamedItem("xmlns:dt")?.value ===
       "EverQuestDataTypes"
   ) {
     console.log("Valid Schema.");
@@ -109,20 +117,20 @@ function validateFileMeta(sidlDoc: XMLDocument) {
   return true;
 }
 
-const parseSidl = async () => {
-  const parser = new DOMParser();
+async function parseSidl() {
   return fetch(`http://${window.location.hostname}:8080/xml/SIDL.xml`)
     .then((result: any) => result.text())
     .then(doc => {
+      const parser = new DOMParser();
       const sidlDoc = parser.parseFromString(doc, "application/xml");
       if (validateFileMeta(sidlDoc)) {
         let SIDL: Map<string, SidlType> = new Map();
         initSidlBaseElementTypes(SIDL);
 
-        const rootNode = (sidlDoc.getRootNode() as XMLDocument)
+        const rootElement = (sidlDoc.getRootNode() as XMLDocument)
           .firstElementChild;
-        const schemaNode = rootNode!.firstElementChild;
-        let child = schemaNode!.firstElementChild;
+        const schemaElement = rootElement!.firstElementChild;
+        let child = schemaElement!.firstElementChild;
         while (child !== null) {
           const elementType = parseSidlElementType(child, SIDL);
           SIDL.set(elementType.name, elementType);
@@ -133,6 +141,6 @@ const parseSidl = async () => {
 
       return Promise.reject();
     });
-};
+}
 
-export default parseSidl;
+export { parseSidl, validateFileMeta, SidlType };
