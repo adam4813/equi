@@ -17,11 +17,12 @@ const FileItemList: React.FC<{
         {fileName}
       </Button>
       <Collapse p={2} isOpen={show}>
-        {items.map(item => (
-          <Box key={item.name} onClick={() => setActiveItem(item)}>
-            {item.name}
-          </Box>
-        ))}
+        {show &&
+          items.map(item => (
+            <Box key={item.name} onClick={() => setActiveItem(item)}>
+              {item.name}
+            </Box>
+          ))}
       </Collapse>
     </Box>
   );

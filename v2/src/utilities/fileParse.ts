@@ -1,4 +1,5 @@
-import { SidlType, validateFileMeta } from "./sidlParse";
+import { SidlType } from "./sidlParse";
+import { getOrDefault, validateFileMeta } from "./fileUtils";
 
 export type ItemPropertyValue =
   | number
@@ -100,14 +101,16 @@ function parseItem(
   return item;
 }
 
+const parser = new DOMParser();
+
 async function parseFile(
+  uiName: string,
   filename: string,
   SIDL: Map<string, SidlType>
 ) {
-  return fetch(`http://${window.location.hostname}:8080/xml/${filename}.xml`)
+  return getOrDefault(uiName, filename)
     .then((result: any) => result.text())
     .then(doc => {
-      const parser = new DOMParser();
       const sidlDoc = parser.parseFromString(doc, "application/xml");
       if (validateFileMeta(sidlDoc)) {
         const rootElement = (sidlDoc.getRootNode() as XMLDocument)

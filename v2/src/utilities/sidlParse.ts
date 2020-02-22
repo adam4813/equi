@@ -1,3 +1,5 @@
+import { getOrDefault, validateFileMeta } from "./fileUtils";
+
 class SidlType implements ISidlType {
   name!: string;
   superType: SidlType | undefined;
@@ -79,46 +81,8 @@ function parseSidlElementType(
   return element;
 }
 
-function validateFileMeta(sidlDoc: XMLDocument) {
-  const rootElement = (sidlDoc.getRootNode() as XMLDocument).firstElementChild;
-  if (rootElement === null) {
-    console.log("Can't find XML root element.");
-    return false;
-  }
-  if (
-    rootElement.attributes.getNamedItem("ID")?.value ===
-    "EQInterfaceDefinitionLanguage"
-  ) {
-    console.log("Valid XML ID.");
-  } else {
-    console.log(
-      "XML ID should read: '<XML ID=\"EQInterfaceDefinitionLanguage\">'"
-    );
-    return false;
-  }
-
-  const schemaElement = rootElement.firstElementChild;
-  if (schemaElement === null) {
-    console.log("Can't find Schema element.");
-    return false;
-  }
-  if (
-    schemaElement.attributes.getNamedItem("xmlns")?.value === "EverQuestData" &&
-    schemaElement.attributes.getNamedItem("xmlns:dt")?.value ===
-      "EverQuestDataTypes"
-  ) {
-    console.log("Valid Schema.");
-  } else {
-    console.log(
-      'Schema should read: \'<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />\''
-    );
-    return false;
-  }
-  return true;
-}
-
-async function parseSidl() {
-  return fetch(`http://${window.location.hostname}:8080/xml/SIDL.xml`)
+async function parseSidl(uiName: string, fileName: string) {
+  return getOrDefault(uiName, fileName)
     .then((result: any) => result.text())
     .then(doc => {
       const parser = new DOMParser();
@@ -143,4 +107,4 @@ async function parseSidl() {
     });
 }
 
-export { parseSidl, validateFileMeta, SidlType };
+export { parseSidl, SidlType };
