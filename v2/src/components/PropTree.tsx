@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Accordion,
-  AccordionHeader,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Text
-} from "@chakra-ui/core/dist";
-import { Item, ItemPropertyValue } from "utilities/fileParse";
+import { Box, Flex, Heading, Text } from "@chakra-ui/core/dist";
+import { Item } from "../utilities/fileParse";
 
 const PropElement: React.FC<{
   prop: ItemPropertyValue | ItemPropertyValue[];
@@ -17,7 +9,7 @@ const PropElement: React.FC<{
     <Box pl={4}>
       {(prop as ItemPropertyValue[]).map((propItem, key) => {
         if (propItem instanceof Item) {
-          return <Box key={key}>{(propItem as Item).name}</Box>;
+          return <Box key={key}>{(propItem as IItem).name}</Box>;
         }
         if (propItem instanceof Map) {
           return (
@@ -37,6 +29,7 @@ const PropElement: React.FC<{
             </Box>
           );
         }
+        return null;
       })}
     </Box>
   ) : prop instanceof Map ? (
@@ -59,16 +52,21 @@ const PropElement: React.FC<{
   );
 };
 
-const PropTree: React.FC<{ item: Item | undefined }> = ({ item }) => (
-  <Accordion allowMultiple>
-    <AccordionItem>
-      <AccordionHeader>
-        <Box flex="1" textAlign="left">
-          {item?.name}
-        </Box>
-        <AccordionIcon />
-      </AccordionHeader>
-      <AccordionPanel pb={4}>
+const PropTree: React.FC<{ item: IItem | undefined }> = ({ item }) => (
+  <Flex flexDir="column" height="100%">
+    <Heading
+      as="h5"
+      size="sm"
+      p={2}
+      height="40px"
+      borderTop="1px solid"
+      borderBottom="1px solid"
+      borderColor="inherit"
+    >
+      {item?.name}
+    </Heading>
+    <Box height="100%" overflowY="auto">
+      <Box mx={2} mb={2}>
         {Array.from(item?.propertyValues.entries() ?? []).map(
           ([key, value]) => (
             <Box key={key} textAlign="left">
@@ -77,9 +75,9 @@ const PropTree: React.FC<{ item: Item | undefined }> = ({ item }) => (
             </Box>
           )
         )}
-      </AccordionPanel>
-    </AccordionItem>
-  </Accordion>
+      </Box>
+    </Box>
+  </Flex>
 );
 
 export default PropTree;

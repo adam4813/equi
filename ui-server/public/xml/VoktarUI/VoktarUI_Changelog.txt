@@ -1,0 +1,128 @@
+Version 1.70.003 - List of Changes.
+
+	. Updated for live.
+
+Version 1.70.002 - List of Changes.
+
+	. Updated for live: EQUI_CastSpellWnd & EQUI_ItemDisplay windows.
+
+Version 1.70.001 - List of Changes.
+
+	. Updated for live.
+	. Besides EQInterface, VoktarUI is now hosted on GitHub too. Now you can download the latest version by clicking on the
+	  VoktarUI_Update shortcut located in the VoktarUI folder.
+
+Version 1.62 - List of Changes.
+
+	. Updated for live.
+	. Made transparent versions for the Group, Player and Target of Target Windows, you can find these in
+	  the ".\AltWindows\Transparent" folder. The default ones are in the ".\AltWindows\Default" folder.
+
+Version 1.61 - List of Changes.
+
+	. Updated for live: Added the "Find Item" button to inventory & bank windows.
+
+Version 1.6 - List of Changes.
+
+	. Updated for live.
+	. Added character level and the available number of alternate advancement points in the compass window.
+
+Version 1.53 - List of Changes.
+
+	. Patch day ready: Updated the inventory window to reflect the patch changes.
+	. Fixed a bug in the SpellDisplay Window. Default is missing SDW_SpellDurationLabel and the game parser is throwing an error.
+
+Version 1.52 - List of Changes.
+
+	. Patch day ready: Updated the inventory window to reflect the next patch changes.
+	. Fixed a bug in the Target Window.
+
+Version 1.51 - List of Changes.
+
+	. Patch day ready: Updated the inventory, AA and item display windows to reflect the next patch changes.
+	. Fixed some window margins: Bank & Give windows.
+
+Version 1.5 - List of Changes.
+
+	. Added normal and alternate experience bars to the compass window.
+
+Version 1.41 - List of Changes.
+
+	. Fixed a couple bugs preventing information labels to show inside the breath and casting windows.
+
+Version 1.4 - List of Changes.
+
+	. Fixed a bug that was rendering the target HP bar in the background of the effects window.
+
+Version 1.31_22-may-2015 - List of Changes.
+
+	. Updated for live.
+
+Version 1.31_19-may-2015 - List of Changes.
+
+	. Updated for live.
+
+Version 1.31 - List of Changes.
+
+	. Removed the "Upgrade Character" button from the inventory window. You can still upgrade to heroic from the character selection
+	  window.
+	. Fixed the location of the label "Max. items in one stack" in the "Alternate Currency" inventory tab.
+	. Added minimize and close buttons to the windows: inventory, zone guide, alarm, player customization, containers and voice bar.
+	. Fixed some window margins: trade, give, dye, player customization and inspect windows.
+	. New generic 3Box config file for ISBoxer: "VoktarUI_3Box_ISBoxer.txt". To try this 3Box configuration you have to follow
+	  these steps:
+
+		1) Copy the windows layout file "UI_3Box.ini" to the game directory.
+		2) Load the layout for each character you plan to box by the Options Window and make sure the "Loadouts" button
+		   is checked.
+		3) Import the configuration to ISBoxer.
+
+	  Read carefully the wiki (isboxer.com/wiki/Configuration_Sharing) and follow the indicated steps.
+
+	  Note that if you are already an ISBoxer user you can lost your old config if your not follow the correct steps, so
+	  be carefull. In this case you need to start a second instance of ISBoxer.
+
+Version 1.30 - List of Changes.
+
+	. Updated the short duration buff window to acomodate 10 extra slots.
+	. New effects window, only con color and target spells are visible.
+	. Made the pet window slightly more compact.
+	. The player window is slightly more compact.
+	. The aggro meter gauge is slightly smaller.
+	. The default target window is slightly more compact.
+	. Reduced the label font size of the default target of target window to better acomodate the gauge.
+	. Included default mouse icons.
+	. Updated the layout file.
+
+Version 1.20 - List of Changes.
+
+	. Semi-scrollable item display window.
+	. Fixed all window background textures. Previously all shared the same one, now they use the intended defaults.
+	. Cleaned the background textures from titlebars, now they are crystal clear ;)
+	. Fixed some more margins and paddings.
+	. Updated the layout file.
+
+Version 1.10 - List of Changes.
+
+	. Bigger pet and pet's target HP bar.
+	. Resizable target of target window with stretching HP bar.
+	. Smaller casting bar.
+	. Slightly smaller breath bar with an informative label.
+	. Repositioned some gauges, boxes and buttons, and tweaked some margins and paddings.
+	. Added reasonable minimum size for a few windows.
+
+Version 1.01 - List of Changes.
+ 
+	. Added a general layout file.
+
+Version 1.00 - Initial Release.
+
+	. 14px high titlebars with custom minimize/maximize, help and close buttons.
+	. 1px borders.
+	. No filigrees! All window borders are square.
+	. Unnecessary titlebars removed.
+	. Detailed vertical layouts for the long and short duration buff windows.
+	. 18*18px buff icons.
+	. Horizontal combat abilities window.
+	. Reworked casting and breath bars.
+	. Smaller MainEQ button.

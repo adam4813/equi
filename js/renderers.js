@@ -1,137 +1,13 @@
 viewers = {};
-
-function fixFileExt(filename) {
-	var ret = filename;
-	if (filename.indexOf("tga") > 0 || filename.indexOf("dds") > 0) {
-		ret = filename.replace(/(.*)\.(.*?)$/, "$1.png")
-	}
-	return ret;
+{
+  let script = document.createElement("script");
+  script.src = "js/renderers/Ui2DAnimation.js";
+  document.head.appendChild(script);
 }
-
-viewers["TextureInfo"] = function (item, location) {
-	var img = $.parseHTML("<img src='img/" + fixFileExt(item.item) + "'/>");
-	return img;
-}
-
-/* TODO:
-|- Hotspot
-|- Shading
-|- Specular
-*/
-viewers["Frame"] = function (item, location) {
-	var img = $.parseHTML("<img src='img/" + fixFileExt(item.elements["Texture"].valueHolder.value) + "'/>");
-	$(img).one("load", function() {
-		img.initialWidth = img[0].width;
-		img.initialHeight = img[0].height;
-		var loc = item.elements["Location"].valueHolder;
-		var size = item.elements["Size"].valueHolder;
-		var width = $(location).width();
-		var height = $(location).height();
-
-		// If there isn't a defined width/height we will use the frame's width/height.
-		if (width == 0) {
-			width = parseInt(size.elements["CX"].valueHolder.value);
-		}
-		if (height == 0) {
-			height = parseInt(size.elements["CY"].valueHolder.value);
-		}
-
-		// Determine the scaling factor that needs to be applied to match the width/height.
-		var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
-		var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
-
-		
-		$(img).css({
-			"position": "absolute",
-			"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
-			"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * scaleY) + "px",
-			"z-index": "-1",
-			"user-select": "none",
-			"width": img[0].width * scaleX + "px",
-			"height": img[0].height * scaleY + "px",
-		});
-
-		$(location).append(img).width(width).height(height);
-		this.updateSize = function() {
-			var loc = item.elements["Location"].valueHolder;
-			var size = item.elements["Size"].valueHolder;
-			var width = $(location).width();
-			var height = $(location).height();
-
-			// If there isn't a defined width/height we will use the frame's width/height.
-			if (width == 0) {
-				width = parseInt(size.elements["CX"].valueHolder.value);
-			}
-			if (height == 0) {
-				height = parseInt(size.elements["CY"].valueHolder.value);
-			}
-
-			// Determine the scaling factor that needs to be applied to match the width/height.
-			var scaleX = width / parseInt(size.elements["CX"].valueHolder.value);
-			var scaleY = height / parseInt(size.elements["CY"].valueHolder.value);
-
-			$(img).css({
-				"left": "-" + (parseInt(loc.elements["X"].valueHolder.value) * scaleX) + "px",
-				"top": "-" + (parseInt(loc.elements["Y"].valueHolder.value) * scaleY) + "px",
-				"width": img.initialWidth * scaleX + "px",
-				"height": img.initialHeight * scaleY + "px",
-			});
-		}
-	}).each(function() {
-	  if(this.complete) $(this).load();
-	});
-};
-
-/* TODO:
-|- Grid
-|- Vertical
-|- CellWidth
-|- CellHeight
-*/
-viewers["Ui2DAnimation"] = function (item, location) {
-	var currentFrame = 0;
-	var run = setInterval(animate, item.elements["Frames"].valueHolder[currentFrame].elements["Duration"].valueHolder.value);
-	var div = $.parseHTML("<div/>");
-
-	for (frame in item.elements["Frames"].valueHolder) {
-		$(div).css({ "overflow": "hidden", "position": "relative" });
-		$(div).width($(location).width()).height($(location).height())
-		viewers["Frame"](item.elements["Frames"].valueHolder[frame], div);
-	}
-	div.updateSize = function() {
-		$(div).width($(location).width()).height($(location).height())
-		$(div).children().each(function() {
-			this.updateSize();
-		});
-	}
-
-	$(div).attr("id", item.item);
-	$(location).append(div);
-
-	$(div).children().not(":eq(0)").hide();
-
-	function animate() {
-		clearInterval(run);
-		// This animation is no longer in the DOM so remove the interval.
-		if ($(div).parents().filter("body").length == 0) {
-			return;
-		}
-		currentFrame++;
-		if (currentFrame >= item.elements["Frames"].valueHolder.length) {
-			if (item.elements["Cycle"].valueHolder.value == true) {
-				currentFrame = 0;
-			} else {
-				// Cycle is false so just loop through once.
-				return;
-			}
-		}
-		var frame = item.elements["Frames"].valueHolder[currentFrame];
-
-		$(div).children().filter("img").eq(currentFrame - 1).hide();
-		$(div).children().filter("img").eq(currentFrame).show();
-		run = setInterval(animate, frame.elements["Duration"].valueHolder.value);
-	};
-	return div;
+{
+  let script = document.createElement("script");
+  script.src = "js/renderers/FrameTemplate.js";
+  document.head.appendChild(script);
 }
 
 /* TODO:
@@ -140,12 +16,16 @@ viewers["Ui2DAnimation"] = function (item, location) {
 |- PressedDisabled
 |- *Decal (Behavior)
 */
-viewers["ButtonDrawTemplate"] = function (item, location) {
+viewers["ButtonDrawTemplate"] = function (item, location, decal_width, decal_height) {
 	for (element in item.elements) {
-		if (items[item.elements[element].valueHolder.value]) {
+    if (items[item.elements[element].valueHolder.value]) {
 			var frame = items[item.elements[element].valueHolder.value];
-			var frameDiv = $.parseHTML("<div id='" + element + "'/>");
-			$(frameDiv).width($(location).width()).height($(location).height());
+      var frameDiv = $.parseHTML("<div id='" + element + "'/>");
+      if (element.includes("Decal")) {
+        $(frameDiv).width(decal_width).height(decal_height);
+      } else {
+        $(frameDiv).width($(location).width()).height($(location).height());
+      }
 			viewers["Ui2DAnimation"](frame, frameDiv);
 			$(frameDiv).hide();
 			$(location).append(frameDiv);
@@ -233,194 +113,87 @@ viewers["GaugeDrawTemplate"] = function (item, location) {
 |- Overlap (set both middleMiddle and child div to overflow: visible, and adjust margin and then width/height).
 */
 
-function titleBar(item, location) {
-	var leftImageDiv, rightImageDiv,  middleImageDiv;
-	var middle = $($.parseHTML("<div/>")).addClass("section").attr("id", "Titlebar");
-	var left = $($.parseHTML("<div />")).addClass("piece").attr("id", "TitlebarLeft");
+function titleBar(item, location, textDiv) {
+	let leftImageDiv, rightImageDiv,  middleImageDiv;
+	let leftTopdiv, leftBottomdiv, rightTopdiv, rightBottomdiv;
+	let leftDiv, rightDiv;
+	let middle = $($.parseHTML("<div/>")).addClass("section").attr("id", "Titlebar");
+	let left = $($.parseHTML("<div />")).addClass("piece").attr("id", "TitlebarLeft");
 	if (items[item.elements["LeftTop"].valueHolder.value]) {
-		var leftTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarLeftTop");
+		leftTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarLeftTop");
 		viewers["Ui2DAnimation"](items[item.elements["LeftTop"].valueHolder.value], leftTopdiv);
-	}
-
-	if (items[item.elements["LeftBottom"].valueHolder.value]) {
-		var leftBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarLeftBottom");
-		viewers["Ui2DAnimation"](items[item.elements["LeftBottom"].valueHolder.value], leftBottomdiv);
+		$(left).append(leftTopdiv);
 	}
 
 	if (items[item.elements["Left"].valueHolder.value]) {
 		leftDiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarLeftMiddle");
-		var leftImageDiv = viewers["Ui2DAnimation"](items[item.elements["Left"].valueHolder.value], leftDiv);
+		leftImageDiv = viewers["Ui2DAnimation"](items[item.elements["Left"].valueHolder.value], leftDiv);
+		$(left).append(leftDiv)
 	}
-	$(left).append(leftTopdiv).append(leftDiv).append(leftBottomdiv);
 
-	var right = $($.parseHTML("<div />")).addClass("piece").attr("id", "TitlebarRight");
+	if (items[item.elements["LeftBottom"].valueHolder.value]) {
+		leftBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarLeftBottom");
+		viewers["Ui2DAnimation"](items[item.elements["LeftBottom"].valueHolder.value], leftBottomdiv);
+		$(left).append(leftBottomdiv);
+	}
+
+	let right = $($.parseHTML("<div />")).addClass("piece").attr("id", "TitlebarRight");
 	if (items[item.elements["RightTop"].valueHolder.value]) {
-		var rightTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarRightTop");
+		rightTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarRightTop");
 		viewers["Ui2DAnimation"](items[item.elements["RightTop"].valueHolder.value], rightTopdiv);
-	}
-
-	if (items[item.elements["RightBottom"].valueHolder.value]) {
-		var rightBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarRightBottom");
-		viewers["Ui2DAnimation"](items[item.elements["RightBottom"].valueHolder.value], rightBottomdiv);
+		$(right).append(rightTopdiv);
 	}
 
 	if (items[item.elements["Right"].valueHolder.value]) {
 		rightDiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarRightMiddle");
-		var rightImageDiv = viewers["Ui2DAnimation"](items[item.elements["Right"].valueHolder.value], rightDiv);
+		rightImageDiv = viewers["Ui2DAnimation"](items[item.elements["Right"].valueHolder.value], rightDiv);
+		$(right).append(rightDiv);
 	}
-	$(right).append(rightTopdiv).append(rightDiv).append(rightBottomdiv);
 
-	var middleEnds = ($(left).children().children().width() + $(right).children().children().width());
+	if (items[item.elements["RightBottom"].valueHolder.value]) {
+		rightBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "TitlebarRightBottom");
+		viewers["Ui2DAnimation"](items[item.elements["RightBottom"].valueHolder.value], rightBottomdiv);
+		$(right).append(rightBottomdiv);
+	}
 
-	var middleMiddle = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TitlebarMiddleMiddle")
+	let middleEnds = ($(left).children().children().width() + $(right).children().children().width());
+
+	let middleMiddle = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TitlebarMiddleMiddle")
 		.width($(location).width() - middleEnds);
-	if (items[item.elements["Middle"].valueHolder.value]) {
-		var div = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TitlebarMiddleMiddle")
-		.width($(middleMiddle).width());
-		middleImageDiv = viewers["Ui2DAnimation"](items[item.elements["Middle"].valueHolder.value], div);
-		$(middleMiddle).append(div);
-	}
+  if (items[item.elements["Middle"].valueHolder.value]) {
+    middleImageDiv = viewers["Ui2DAnimation"](items[item.elements["Middle"].valueHolder.value], middleMiddle);
+    $(middleImageDiv).css("margin", "auto");
+    $(middleImageDiv).append(textDiv)
+    $(middleMiddle).append(middleImageDiv);
+    $(middleMiddle).css("text-align", "center");
+  }
+  else {
+    $(middleMiddle).append(textDiv);
+    $(middleMiddle).css("margin", "auto");
+    $(middle).css("text-align", "center");
+  }
 	$(middle).append(left).append(middleMiddle).append(right);
 	
-	middle.updateSize = function() {
-		$(middle).height($(location).height() - topBottomHeight);
+	middle.updateSize = function(width, height) {
+    $(middle).height($(middleImageDiv).height());
 		$(middleMiddle)
-		.width($(location).width() - middleEnds).height($(middle).height());
+      .width(width - middleEnds).height($(middle).height());
 		if (middleImageDiv !== undefined) {
 			middleImageDiv.updateSize();
 		}
 		
-		$(left).height($(location).height() - topBottomHeight);
-		var capHeight = $(leftTopdiv).children().height() + $(leftBottomdiv).children().height();
-		$(leftDiv).height($(middle).height() - capHeight);
+    $(left).height(height);
+    let capHeight = $(leftTopdiv).children().height() + $(leftBottomdiv).children().height();
+    $(leftDiv).height($(middle).height() - capHeight).width(middleEnds/ 2);
 		leftImageDiv.updateSize();
 		
-		$(right).height($(location).height() - topBottomHeight);
-		var capHeight = $(rightTopdiv).children().height() + $(rightBottomdiv).children().height();
-		$(rightDiv).height($(middle).height() - capHeight);
+    $(right).height(height);
+		capHeight = $(rightTopdiv).children().height() + $(rightBottomdiv).children().height();
+    $(rightDiv).height($(middle).height() - capHeight).width(middleEnds / 2);
 		rightImageDiv.updateSize();
 	}
 	
 	return middle;
-}
-
-viewers["FrameTemplate"] = function (item, location) {
-	var topImageDiv, leftImageDiv, rightImageDiv, bottomImageDiv, middleImageDiv, bottomDiv, topDiv;
-	var top = $($.parseHTML("<div />")).addClass("section").attr("id", "Top");
-	if (items[item.elements["TopLeft"].valueHolder.value]) {
-		var topLeftdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopLeft");
-		viewers["Ui2DAnimation"](items[item.elements["TopLeft"].valueHolder.value], topLeftdiv);
-	}
-
-	if (items[item.elements["TopRight"].valueHolder.value]) {
-		var topRightdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopRight");
-		viewers["Ui2DAnimation"](items[item.elements["TopRight"].valueHolder.value], topRightdiv);
-	}
-
-	if (items[item.elements["Top"].valueHolder.value]) {
-		var capWidth = $(topLeftdiv).children().width() + $(topRightdiv).children().width();
-		topDiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "TopMiddle").width($(location).width() - capWidth);
-		topImageDiv = viewers["Ui2DAnimation"](items[item.elements["Top"].valueHolder.value], topDiv);
-	}
-	$(top).append(topLeftdiv).append(topDiv).append(topRightdiv);
-
-	var bottom = $($.parseHTML("<div />")).addClass("section").attr("id", "Bottom");
-	if (items[item.elements["BottomLeft"].valueHolder.value]) {
-		var bottomLeftdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomLeft");
-		viewers["Ui2DAnimation"](items[item.elements["BottomLeft"].valueHolder.value], bottomLeftdiv);
-	}
-
-	if (items[item.elements["BottomRight"].valueHolder.value]) {
-		var bottomRightdiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomRight");
-		viewers["Ui2DAnimation"](items[item.elements["BottomRight"].valueHolder.value], bottomRightdiv);
-	}
-
-	if (items[item.elements["Bottom"].valueHolder.value]) {
-		var capWidth = $(bottomLeftdiv).children().width() + $(bottomRightdiv).children().width();
-		bottomDiv = $($.parseHTML("<div/>")).addClass("piece").attr("id", "BottomMiddle").width($(location).width() - capWidth);
-		bottomImageDiv = viewers["Ui2DAnimation"](items[item.elements["Bottom"].valueHolder.value], bottomDiv);
-	}
-	$(bottom).append(bottomLeftdiv).append(bottomDiv).append(bottomRightdiv);
-
-	var topBottomHeight = $(top).children().children().height() + $(bottom).children().children().height();
-	var middle = $($.parseHTML("<div/>")).addClass("section").attr("id", "Middle").height($(location).height() - topBottomHeight);
-	var left = $($.parseHTML("<div />")).addClass("piece").attr("id", "Left");
-	if (items[item.elements["LeftTop"].valueHolder.value]) {
-		var leftTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftTop");
-		viewers["Ui2DAnimation"](items[item.elements["LeftTop"].valueHolder.value], leftTopdiv);
-	}
-
-	if (items[item.elements["LeftBottom"].valueHolder.value]) {
-		var leftBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftBottom");
-		viewers["Ui2DAnimation"](items[item.elements["LeftBottom"].valueHolder.value], leftBottomdiv);
-	}
-
-	if (items[item.elements["Left"].valueHolder.value]) {
-		var capHeight = $(leftTopdiv).children().height() + $(leftBottomdiv).children().height();
-		leftDiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "LeftMiddle").height($(middle).height() - capHeight);
-		var leftImageDiv = viewers["Ui2DAnimation"](items[item.elements["Left"].valueHolder.value], leftDiv);
-	}
-	$(left).append(leftTopdiv).append(leftDiv).append(leftBottomdiv);
-
-	var right = $($.parseHTML("<div />")).addClass("piece").attr("id", "Right");
-	if (items[item.elements["RightTop"].valueHolder.value]) {
-		var rightTopdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightTop");
-		viewers["Ui2DAnimation"](items[item.elements["RightTop"].valueHolder.value], rightTopdiv);
-	}
-
-	if (items[item.elements["RightBottom"].valueHolder.value]) {
-		var rightBottomdiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightBottom");
-		viewers["Ui2DAnimation"](items[item.elements["RightBottom"].valueHolder.value], rightBottomdiv);
-	}
-
-	if (items[item.elements["Right"].valueHolder.value]) {
-		var capHeight = $(rightTopdiv).children().height() + $(rightBottomdiv).children().height();
-		rightDiv = $($.parseHTML("<div/>")).addClass("vpiece").attr("id", "RightMiddle").height($(middle).height() - capHeight);
-		var rightImageDiv = viewers["Ui2DAnimation"](items[item.elements["Right"].valueHolder.value], rightDiv);
-	}
-	$(right).append(rightTopdiv).append(rightDiv).append(rightBottomdiv);
-
-	var middleEnds = ($(left).children().children().width() + $(right).children().children().width());
-
-	var middleMiddle = $($.parseHTML("<div/>")).addClass("piece").attr("id", "MiddleMiddle")
-		.width($(location).width() - middleEnds).height($(middle).height());
-	if (items[item.elements["Middle"].valueHolder.value]) {
-		var div = $($.parseHTML("<div/>")).addClass("piece").attr("id", "MiddleMiddle")
-		.width($(middleMiddle).width()).height($(middleMiddle).height());
-		middleImageDiv = viewers["Ui2DAnimation"](items[item.elements["Middle"].valueHolder.value], div);
-		$(middleMiddle).append(div);
-	}
-	$(middle).append(left).append(middleMiddle).append(right);
-
-	$(location).append(top).append(middle).append(bottom);
-	
-	location.updateSize = function() {
-		var capWidth = $(topLeftdiv).children().width() + $(topRightdiv).children().width();
-		$(topDiv).width($(location).width() - capWidth);
-		topImageDiv.updateSize();
-		
-		var capWidth = $(bottomLeftdiv).children().width() + $(bottomRightdiv).children().width();
-		$(bottomDiv).width($(location).width() - capWidth);
-		bottomImageDiv.updateSize();
-		var topBottomHeight = $(top).children().children().height() + $(bottom).children().children().height();
-		
-		$(middle).height($(location).height() - topBottomHeight);
-		$(middleMiddle)
-		.width($(location).width() - middleEnds).height($(middle).height());
-		if (middleImageDiv !== undefined) {
-			middleImageDiv.updateSize();
-		}
-		
-		$(left).height($(location).height() - topBottomHeight);
-		var capHeight = $(leftTopdiv).children().height() + $(leftBottomdiv).children().height();
-		$(leftDiv).height($(middle).height() - capHeight);
-		leftImageDiv.updateSize();
-		
-		$(right).height($(location).height() - topBottomHeight);
-		var capHeight = $(rightTopdiv).children().height() + $(rightBottomdiv).children().height();
-		$(rightDiv).height($(middle).height() - capHeight);
-		rightImageDiv.updateSize();
-	}
 }
 
 /* TODO:
@@ -432,22 +205,128 @@ viewers["FrameTemplate"] = function (item, location) {
 |- MinimizeBox
 |- MaximizeBox
 |- TileBox
-|- Titlebar
+|- Titlebar ( vertical alignment is off. should it be in the top of the frame? )
 */
-viewers["WindowDrawTemplate"] = function (item, parent, titlebar) {
+viewers["WindowDrawTemplate"] = function (item, parent, titlebar, textDiv) {
 	var borderDiv = $($.parseHTML("<div/>")).addClass("frame");
 	$(borderDiv).height($(parent).height()).width($(parent).width());
+	let titlebarDiv;
 	if (titlebar) {
-		let titlebar = titleBar(item.elements["Titlebar"].valueHolder, borderDiv);
+    titlebarDiv = titleBar(item.elements["Titlebar"].valueHolder, borderDiv, textDiv);
 		borderDiv.append(titlebar);
 	}
-	var frameDiv = viewers["FrameTemplate"](item.elements["Border"].valueHolder, borderDiv);
+	var frameDiv = viewers["FrameTemplateOld"](item.elements["Border"].valueHolder, borderDiv, titlebarDiv);
 	$(borderDiv).find("#MiddleMiddle")
 		.css(
 			{"background-image": 'url(img/' + fixFileExt(item.elements["Background"].valueHolder.value) + ')',
 			"z-index": 1}
 		);
 	return borderDiv;
+}
+
+viewers["FrameTemplate"] = function (item, location) {
+	var topImageDiv, leftImageDiv, rightImageDiv, bottomImageDiv, middleImageDiv, bottomDiv, topDiv;
+	
+	var topLeftdiv = $(document.createElement('div')).addClass("piece").attr("id", "top-left");
+	location.append(topLeftdiv);
+	if (items[item.elements["TopLeft"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["TopLeft"].valueHolder.value], topLeftdiv);
+		topLeftdiv.append(image);
+	}
+	var topRightDiv = $(document.createElement('div')).addClass("piece").attr("id", "top-right");
+	location.append(topRightDiv);
+	if (items[item.elements["TopRight"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["TopRight"].valueHolder.value], topRightDiv);
+		topRightDiv.append(image);
+	}
+	let capWidth = topLeftdiv.children().width() + topRightDiv.children().width();
+	var topDiv = $(document.createElement('div')).addClass("piece")
+		.attr("id", "top").width(location.width() - capWidth);
+	location.append(topDiv);
+	if (items[item.elements["Top"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["TopLeft"].valueHolder.value], topDiv);
+		topDiv.append(image);
+	}
+
+	var bottomLeftDiv = $(document.createElement('div')).addClass("piece").attr("id", "bottom-left");
+	location.append(bottomLeftDiv);
+	if (items[item.elements["BottomLeft"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["BottomLeft"].valueHolder.value], bottomLeftDiv);
+		bottomLeftDiv.append(image);
+	}
+	var bottomRightDiv = $(document.createElement('div')).addClass("piece").attr("id", "bottom-right");
+	location.append(bottomRightDiv);
+	if (items[item.elements["BottomRight"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["BottomRight"].valueHolder.value], bottomRightDiv);
+		bottomRightDiv.append(image);
+	}
+	capWidth = bottomLeftDiv.children().width() + bottomRightDiv.children().width();
+	var bottomDiv = $(document.createElement('div')).addClass("piece")
+		.attr("id", "bottom").width(location.width() - capWidth);
+	location.append(bottomDiv);
+	if (items[item.elements["Bottom"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["Bottom"].valueHolder.value], bottomDiv);
+		bottomDiv.append(image);
+	}
+
+	var topBottomHeight = topDiv.children().height() + bottomDiv.children().height();
+	var middleHeight = location.height() - topBottomHeight;
+
+	var leftTopDiv = $(document.createElement('div')).addClass("piece").attr("id", "left-top");
+	location.append(leftTopDiv);
+	if (items[item.elements["LeftTop"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["LeftTop"].valueHolder.value], leftTopDiv);
+		leftTopDiv.append(image);
+	}
+	var leftBottomDiv = $(document.createElement('div')).addClass("piece").attr("id", "left-bottom");
+	location.append(leftBottomDiv);
+	if (items[item.elements["BottomRight"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["LeftBottom"].valueHolder.value], leftBottomDiv);
+		leftBottomDiv.append(image);
+	}
+	let capHeight = leftTopDiv.children().height() + leftBottomDiv.children().height();
+	var leftDiv = $(document.createElement('div')).addClass("piece")
+		.attr("id", "left").height(middleHeight - capHeight)
+	location.append(leftDiv);
+	if (items[item.elements["Left"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["Left"].valueHolder.value], leftDiv);
+		leftDiv.append(image);
+	}
+
+
+	var rightTopDiv = $(document.createElement('div')).addClass("piece").attr("id", "right-top");
+	location.append(rightTopDiv);
+	if (items[item.elements["RightTop"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["RightTop"].valueHolder.value], rightTopDiv);
+		rightTopDiv.append(image);
+	}
+	var rightBottomDiv = $(document.createElement('div')).addClass("piece").attr("id", "right-bottom");
+	location.append(rightBottomDiv);
+	if (items[item.elements["RightBottom"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["RightBottom"].valueHolder.value], rightBottomDiv);
+		rightBottomDiv.append(image);
+	}
+	capHeight = rightTopDiv.children().height() + rightBottomDiv.children().height();
+	var rightDiv = $(document.createElement('div')).addClass("piece")
+		.attr("id", "right").height(middleHeight - capHeight)
+	location.append(rightDiv);
+	if (items[item.elements["Right"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["Right"].valueHolder.value], rightDiv);
+		rightDiv.append(image);
+	}
+
+	var leftRightWidth = leftDiv.children().width() + rightDiv.children().width();
+
+	var middleDiv = $(document.createElement('div')).addClass("piece").attr("id", "middle")
+		.width(location.width() - leftRightWidth).height(middleHeight);
+	location.append(middleDiv);
+	if (items[item.elements["Middle"].valueHolder.value]) {
+		let image = viewers["Ui2DAnimation"](items[item.elements["Middle"].valueHolder.value], middleDiv);
+		middleDiv.append(image);
+	}
+	
+	location.updateSize = function() {
+	}
 }
 
 /* TODO:
@@ -465,7 +344,6 @@ Control
 Button
 |- UseCustomDisabledColor
 |- RadioGroup
-|- Template
 |- SoundPressed
 |- SoundUp
 |- SoundFlyby
@@ -475,8 +353,8 @@ viewers["Button"] = function (item, location) {
 	var top = parseInt(item.elements["Location"].valueHolder.elements["Y"].valueHolder.value);
 	var width = item.elements["Size"].valueHolder.elements["CX"].valueHolder.value;
 	var height = item.elements["Size"].valueHolder.elements["CY"].valueHolder.value;
-	var decal_x = item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value;
-	var decal_y = item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value;
+	var decal_width = item.elements["DecalSize"].valueHolder.elements["CX"].valueHolder.value;
+	var decal_height = item.elements["DecalSize"].valueHolder.elements["CY"].valueHolder.value;
 
 	if (item.elements["AutoStretch"].valueHolder.value === true) {
 		width = $(location).width();
@@ -511,11 +389,11 @@ viewers["Button"] = function (item, location) {
 		}
 	}
 	else {
-		if (width < decal_x) {
-			width = decal_x;
+		if (width < decal_width) {
+			width = decal_width;
 		}
-		if (height < decal_y) {
-			height = decal_y;
+		if (height < decal_height) {
+			height = decal_height;
 		}
 	}
 	var div = $.parseHTML("<div/>");
@@ -557,7 +435,10 @@ viewers["Button"] = function (item, location) {
 		textDiv["Checkbox_State"] = false;
 	}
 
-	viewers["ButtonDrawTemplate"](item.elements["ButtonDrawTemplate"].valueHolder, textDiv);
+  viewers["ButtonDrawTemplate"](item.elements["ButtonDrawTemplate"].valueHolder, textDiv, decal_width, decal_height);
+  if (items[item.elements["Template"].valueHolder.value]) {
+    viewers["ButtonDrawTemplate"](items[item.elements["Template"].valueHolder.value], textDiv, decal_width, decal_height);
+  }
 
 	// Apply Decal properties to any Decal children.
 	decalElements = $(textDiv).find("[id$=Decal]");
@@ -764,17 +645,15 @@ viewers["Screen"] = function (item, location) {
 	
 	let textDiv = $.parseHTML("<div id='Text' class='label'>" + item.elements["Text"].valueHolder.value);
 	let rgb = item.elements["TextColor"].valueHolder.elements;
-	$(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value)).css({
-		"position": "absolute",
-		"color": "rgb(" + rgb["R"].valueHolder.value + ", " +
+  $(textDiv).attr("title", (item.elements["TooltipReference"].valueHolder.value)).css({
+		"color": "white"/*"rgb(" + rgb["R"].valueHolder.value + ", " +
 			rgb["G"].valueHolder.value + ", " +
-			rgb["B"].valueHolder.value + ")",
+			rgb["B"].valueHolder.value + ")"*/,
 	});
 
-	var templateDiv = viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], screenDiv, item.elements["Style_Titlebar"].valueHolder.value);
+  var templateDiv = viewers["WindowDrawTemplate"](items[item.elements["DrawTemplate"].valueHolder.value], screenDiv, item.elements["Style_Titlebar"].valueHolder.value, textDiv);
 	screenDiv.append(templateDiv);
 	let middleMiddleDiv = templateDiv.find("#MiddleMiddle");
-	middleMiddleDiv.append(textDiv);
 	
 	let pieces = item.elements["Pieces"].valueHolder;
 	for (var i = 0; i < pieces.length; i++) {

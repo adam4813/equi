@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "FileServer",
+      "program": "${workspaceFolder}/ui-server/bin/www",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Editor",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/v2/src",
+      "preLaunchTask": "npm: start",
+      "smartStep": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "FileServer/Editor",
+      "configurations": ["FileServer", "Editor"]
+    }
+  ]
+}

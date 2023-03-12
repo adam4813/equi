@@ -1,19 +1,8 @@
-import { SidlType } from "./sidlParse";
 import { getOrDefault, validateFileMeta } from "./fileUtils";
 
-export type ItemPropertyValue =
-  | number
-  | string
-  | boolean
-  | Map<
-      string,
-      number | string | boolean | Map<string, number | string | boolean>
-    >
-  | Item;
-
-class Item {
+class Item implements IItem {
   name!: string;
-  type!: SidlType;
+  type!: ISidlType;
   propertyValues: Map<
     string,
     ItemPropertyValue | ItemPropertyValue[]
@@ -24,18 +13,25 @@ const allItems: Map<string, Item> = new Map();
 
 function parseProp(
   propRootElement: Element,
-  rootElementType: SidlType,
-  SIDL: Map<string, SidlType>,
+  rootElementType: ISidlType,
+  SIDL: Map<string, ISidlType>,
   existingItems: Map<string, Item>
 ) {
   const propTypeName = propRootElement.tagName;
   const propType = rootElementType.properties.find(
-    property => property.name === propTypeName
+    (property) => property.name === propTypeName
   );
 
   let prop;
   if (propType?.isItem) {
-    prop = existingItems.get(propRootElement.innerHTML)!;
+    const delimIndex = propRootElement.innerHTML.indexOf(":");
+    const itemName = propRootElement.innerHTML.slice(
+      delimIndex >= 0 ? delimIndex + 1 : 0
+    );
+    if (!existingItems.has(itemName)) {
+      //console.log(`Couldn't find ${itemName} (${propRootElement.innerHTML})`);
+    }
+    prop = existingItems.get(itemName)!;
   } else if (propType?.type?.properties.length === 0) {
     prop = propRootElement.innerHTML ?? propType.defaultValue;
   } else {
@@ -43,12 +39,9 @@ function parseProp(
     const subProps = new Map<string, ItemPropertyValue | ItemPropertyValue[]>();
     while (subPropRootElement !== null) {
       const subPropTypeName = subPropRootElement.tagName;
-      const subPropType = propType?.type?.properties.find(
-        property => property.name === subPropTypeName
-      );
       const subProp = parseProp(
         subPropRootElement,
-        propType!.type as SidlType,
+        propType!.type as ISidlType,
         SIDL,
         existingItems
       ) as ItemPropertyValue | ItemPropertyValue[];
@@ -63,13 +56,13 @@ function parseProp(
 
 function parseItem(
   itemRootElement: Element,
-  SIDL: Map<string, SidlType>,
+  SIDL: Map<string, ISidlType>,
   existingItems: Map<string, Item>
 ): Item | undefined {
   const itemName = itemRootElement.attributes.getNamedItem("item")?.value;
   const typeName = itemRootElement.tagName;
   if (!itemName || !SIDL.has(typeName)) {
-    console.log("Failed to parse item name, or element type missing");
+    //console.log("Failed to parse item name, or element type missing");
     return undefined;
   }
   const item = new Item();
@@ -106,11 +99,11 @@ const parser = new DOMParser();
 async function parseFile(
   uiName: string,
   filename: string,
-  SIDL: Map<string, SidlType>
+  SIDL: Map<string, ISidlType>
 ) {
   return getOrDefault(uiName, filename)
     .then((result: any) => result.text())
-    .then(doc => {
+    .then((doc) => {
       const sidlDoc = parser.parseFromString(doc, "application/xml");
       if (validateFileMeta(sidlDoc)) {
         const rootElement = (sidlDoc.getRootNode() as XMLDocument)
@@ -131,4 +124,4 @@ async function parseFile(
     });
 }
 
-export { parseFile, Item, SidlType };
+export { parseFile, Item };

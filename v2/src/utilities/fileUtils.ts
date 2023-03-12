@@ -38,14 +38,18 @@ function validateFileMeta(sidlDoc: XMLDocument) {
 
 // Should be done on the server, but just in case
 async function getOrDefault(uiName: string = "default", fileName: string) {
-  return fetch(`/xml/${uiName}/${fileName}`).then(result => {
+  return fetch(`/xml/${uiName}/${fileName}`).then((result) => {
     if (result.ok) {
       return result;
     } else {
       /*console.log(
                 `${fileName} not found in ui ${uiName}, attempting to load from default.`
             );*/
-      return fetch(`/xml/default/${fileName}`).then(result => result);
+      return fetch(`/xml/default/${fileName}`).then((result) => {
+        if (result.ok) {
+          return result;
+        }
+      });
     }
   });
 }

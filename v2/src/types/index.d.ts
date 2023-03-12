@@ -14,3 +14,22 @@ interface ISidlType {
   properties: SidlProp[];
   addProperty(prop: SidlProp): void;
 }
+
+interface IItem {
+  name: string;
+  type: ISidlType;
+  propertyValues: Map<string, ItemPropertyValue | ItemPropertyValue[]>;
+}
+
+type UIFIle = Map<string, Item>;
+
+type MapProperty = Map<
+  string,
+  number | string | boolean | Map<string, number | string | boolean>
+>;
+
+type ItemPropertyValue = number | string | boolean | MapProperty | IItem;
+
+type SidlMap = Map<string, ISidlType>;
+
+type FileMap = Map<string, UIFIle>;

@@ -34,7 +34,7 @@ function parseSIDL(cb) {
 
 			var rootElement = getChildElementNode(schema); // Get the first top level ElementType.
 			while (rootElement != null) {
-				elementType = rootElement.attributes.item(0).value; // Name of the top level ElementType.
+				sidlElementType = rootElement.attributes.item(0).value; // Name of the top level ElementType.
 				sidl[elementType] = {}; // Make a new object with the name of this top level ElementType.
 
 				var child = getChildElementNode(rootElement); // Get the first element of this top level ElementType.

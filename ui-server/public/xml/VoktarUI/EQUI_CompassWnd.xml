@@ -1,0 +1,317 @@
+<?xml version = "1.0"?>
+<XML ID = "EQInterfaceDefinitionLanguage">
+	<Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+
+<!--ADDBLOCK: START-->
+	<Gauge item="CMPW_ExpGauge">
+		<ScreenID>CMPW_ExpGauge</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>118</CX>
+			<CY>11</CY>
+		</Size>
+		<TooltipReference>Normal Experience</TooltipReference>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>220</R>
+			<G>150</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>80</G>
+			<B>220</B>
+		</LinesFillTint>
+		<DrawLinesFill>true</DrawLinesFill>
+		<EQType>4</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GaugeBackground</Background>
+			<Fill>A_GaugeFill</Fill>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+			<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>
+			<EndCapRight>A_GaugeEndCapRight</EndCapRight>
+		</GaugeDrawTemplate>
+	</Gauge>
+
+	<Label item="CMPW_Exp_Label">
+		<ScreenID>CMPW_Exp_Label</ScreenID>
+		<EQType>26</EQType>
+		<RelativePosition>true</RelativePosition>
+		<Font>2</Font>
+		<AutoStretch>true</AutoStretch>
+		<TooltipReference>Normal Experience</TooltipReference>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>-1</TopAnchorOffset>
+		<LeftAnchorOffset>52</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_ExpPercLabel">
+		<ScreenID>CMPW_ExpPercLabel</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Font>2</Font>
+		<Text>%</Text>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<AutoStretch>true</AutoStretch>
+		<TooltipReference>Normal Experience</TooltipReference>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>-1</TopAnchorOffset>
+		<LeftAnchorOffset>64</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_Level_Label">
+		<ScreenID>CMPW_Level_Label</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Font>4</Font>
+		<AutoStretch>true</AutoStretch>
+		<Text>Level:</Text>
+		<TooltipReference>Character Level</TooltipReference>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>16</TopAnchorOffset>
+		<LeftAnchorOffset>3</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_Level_EQType">
+		<ScreenID>CMPW_Level_EQType</ScreenID>
+		<EQType>2</EQType>
+		<RelativePosition>true</RelativePosition>
+		<Font>5</Font>
+		<AutoStretch>true</AutoStretch>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>13</TopAnchorOffset>
+		<LeftAnchorOffset>38</LeftAnchorOffset>
+	</Label>
+
+	<Gauge item="CMPW_AltAdvGauge">
+		<ScreenID>CMPW_AltAdvGauge</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>120</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>118</CX>
+			<CY>11</CY>
+		</Size>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<TooltipReference>Alternate Advancement Experience</TooltipReference>
+		<FillTint>
+			<R>220</R>
+			<G>150</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>40</G>
+			<B>150</B>
+		</LinesFillTint>
+		<DrawLinesFill>true</DrawLinesFill>
+		<EQType>5</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GaugeBackground</Background>
+			<Fill>A_GaugeFill</Fill>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+			<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>
+			<EndCapRight>A_GaugeEndCapRight</EndCapRight>
+		</GaugeDrawTemplate>
+	</Gauge>
+
+	<Label item="CMPW_AltExp_Label">
+		<ScreenID>CMPW_AltExp_Label</ScreenID>
+		<EQType>27</EQType>
+		<RelativePosition>true</RelativePosition>
+		<Font>2</Font>
+		<AutoStretch>true</AutoStretch>
+		<TooltipReference>Alternate Advancement Experience</TooltipReference>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>-1</TopAnchorOffset>
+		<LeftAnchorOffset>172</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_AltExpPercLabel">
+		<ScreenID>CMPW_AltExpPercLabel</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Font>2</Font>
+		<Text>%</Text>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<AutoStretch>true</AutoStretch>
+		<TooltipReference>Alternate Advancement Experience</TooltipReference>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>-1</TopAnchorOffset>
+		<LeftAnchorOffset>184</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_AAP_Label">
+		<ScreenID>CMPW_AAP_Label</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Font>4</Font>
+		<AutoStretch>true</AutoStretch>
+		<Text>AAP:</Text>
+		<TooltipReference>Alternate Advancement Points</TooltipReference>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>16</TopAnchorOffset>
+		<LeftAnchorOffset>170</LeftAnchorOffset>
+	</Label>
+
+	<Label item="CMPW_AAP_EQType">
+		<ScreenID>CMPW_AAP_EQType</ScreenID>
+		<EQType>71</EQType>
+		<RelativePosition>true</RelativePosition>
+		<Font>5</Font>
+		<AutoStretch>true</AutoStretch>
+		<TextColor>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
+		</TextColor>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>13</TopAnchorOffset>
+		<LeftAnchorOffset>201</LeftAnchorOffset>
+	</Label>
+<!--ADDBLOCK: END-->
+
+	<StaticAnimation item = "CMPW_Overlay">
+		<ScreenID>CompassOverlay</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+<!--MODIFY-->		<Y>1</Y>
+		</Location>
+		<Size>
+			<CX>98</CX>
+			<CY>24</CY>
+		</Size>
+		<Animation>A_CompassOverlay</Animation>
+	</StaticAnimation>
+
+	<StaticAnimation item = "CMPW_Strip1">
+		<ScreenID>CompassStrip1</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>180</CX>
+			<CY>24</CY>
+		</Size>
+		<Animation>A_CompassStrip</Animation>
+	</StaticAnimation>
+
+	<StaticAnimation item = "CMPW_Strip2">
+		<ScreenID>CompassStrip2</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>180</CX>
+			<CY>24</CY>
+		</Size>
+		<Animation>A_CompassStrip</Animation>
+	</StaticAnimation>
+
+<!--ADDBLOCK: START-->
+	<TileLayoutBox item="CMPW_CompassBox">
+		<AutoStretch>true</AutoStretch>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<TopAnchorOffset>11</TopAnchorOffset>
+		<LeftAnchorOffset>69</LeftAnchorOffset>
+		<RightAnchorOffset>71</RightAnchorOffset>
+		<Pieces>CMPW_Strip1</Pieces>
+		<Pieces>CMPW_Strip2</Pieces>
+		<Pieces>CMPW_Overlay</Pieces>
+	</TileLayoutBox>
+<!--ADDBLOCK: END-->
+
+	<Screen item = "CompassWindow">
+		<!--<ScreenID/>-->
+		<!--<Font/>-->
+		<RelativePosition>false</RelativePosition>
+		<Location>
+			<X>350</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+<!--MODIFY-->		<CX>239</CX>
+<!--MODIFY-->		<CY>38</CY>
+		</Size>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+<!--MODIFY-->	<DrawTemplate>WDT_InnerGray</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+<!--MODIFY-->	<Style_Border>true</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Escapable>false</Escapable>
+<!--ADD-->	<Pieces>CMPW_ExpGauge</Pieces>
+<!--ADD-->	<Pieces>CMPW_Exp_Label</Pieces>
+<!--ADD-->	<Pieces>CMPW_ExpPercLabel</Pieces>
+<!--ADD-->	<Pieces>CMPW_Level_Label</Pieces>
+<!--ADD-->	<Pieces>CMPW_Level_EQType</Pieces>
+<!--ADD-->	<Pieces>CMPW_AltAdvGauge</Pieces>
+<!--ADD-->	<Pieces>CMPW_AltExp_Label</Pieces>
+<!--ADD-->	<Pieces>CMPW_AltExpPercLabel</Pieces>
+<!--ADD-->	<Pieces>CMPW_AAP_Label</Pieces>
+<!--ADD-->	<Pieces>CMPW_AAP_EQType</Pieces>
+<!--ADD-->	<Pieces>TileLayoutBox:CMPW_CompassBox</Pieces>
+	</Screen>
+
+</XML>

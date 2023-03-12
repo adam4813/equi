@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+
+	<Listbox item="CSSW_SkillSelectorList">
+		<ScreenID>CSSW_SkillSelectorList</ScreenID>
+		<DrawTemplate>WDT_Inner</DrawTemplate>
+		<Location>
+			<X>0</X>
+			<Y>130</Y>
+		</Location>
+		<Size>
+			<CX>300</CX>
+			<CY>180</CY>
+		</Size>
+		<MinVSize>180</MinVSize>
+		<Style_Sizable>true</Style_Sizable>
+		<Style_Border>true</Style_Border>
+		<Style_VScroll>true</Style_VScroll>
+		<RelativePosition>true</RelativePosition>
+		<Columns>
+			<Heading>Name</Heading>
+			<Width>130</Width>
+		</Columns>
+		<Columns>
+			<Heading>Level</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Cost</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Upkeep</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Target</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Duration</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Reuse</Heading>
+			<Width>50</Width>
+		</Columns>
+		<Columns>
+			<Heading>Timer</Heading>
+			<Width>50</Width>
+		</Columns>
+	</Listbox>
+
+	<STMLbox item="CSSW_SkillDescriptionStmlBox">
+		<ScreenID>CSSW_SkillDescriptionStmlBox</ScreenID>
+		<DrawTemplate>WDT_Inner</DrawTemplate>
+		<Location>
+			<X>0</X>
+			<Y>315</Y>
+		</Location>
+		<Size>
+			<CX>300</CX>
+			<CY>35</CY>
+		</Size>
+		<Spacing>4</Spacing>
+		<MinVSize>35</MinVSize>
+		<Style_VScroll>true</Style_VScroll>
+		<Style_Border>true</Style_Border>
+		<Text />
+	</STMLbox>
+
+	<Button item="CSSW_MakeHotkeyButton">
+		<ScreenID>CSSW_MakeHotkeyButton</ScreenID>
+		<AutoStretch>true</AutoStretch>
+		<TopAnchorToTop>false</TopAnchorToTop>
+		<RightAnchorToLeft>true</RightAnchorToLeft>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<LeftAnchorOffset>4</LeftAnchorOffset>
+		<TopAnchorOffset>29</TopAnchorOffset>
+		<RightAnchorOffset>154</RightAnchorOffset>
+		<BottomAnchorOffset>4</BottomAnchorOffset>
+		<Style_Transparent>false</Style_Transparent>
+		<Style_Checkbox>false</Style_Checkbox>
+		<Text>Make Hotkey</Text>
+		<!--<TooltipReference/>-->
+		<Template>BDT_Normal</Template>
+	</Button>
+
+	<VerticalLayoutBox item = "COMBATSKILL_Layout">
+		<ScreenID>COMBATSKILL_Layout</ScreenID>
+		<DrawTemplate>WDT_Inner</DrawTemplate>
+		<AutoStretch>true</AutoStretch>
+		<LeftAnchorOffset>4</LeftAnchorOffset>
+		<TopAnchorOffset>4</TopAnchorOffset>
+		<RightAnchorOffset>4</RightAnchorOffset>
+		<BottomAnchorOffset>4</BottomAnchorOffset>
+		<TopAnchorToTop>true</TopAnchorToTop>
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<LeftAnchorToLeft>true</LeftAnchorToLeft>
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<Spacing>4</Spacing>
+		<Style_Border>false</Style_Border>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<Pieces>CSSW_SkillSelectorList</Pieces>
+		<Pieces>CSSW_SkillDescriptionStmlBox</Pieces>
+		<Pieces>CSSW_MakeHotkeyButton</Pieces>
+	</VerticalLayoutBox>
+
+	<Screen item="CombatSkillSelectWnd">
+		<RelativePosition>true</RelativePosition>
+		<MinVSize>267</MinVSize>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<Text>Combat Skills</Text>
+		<DrawTemplate>WDT_defaultChat_Def</DrawTemplate>
+		<Style_Titlebar>true</Style_Titlebar>
+		<Style_Closebox>true</Style_Closebox>
+		<Style_Minimizebox>true</Style_Minimizebox>
+		<Style_Border>true</Style_Border>
+		<Style_Sizable>true</Style_Sizable>
+		<Pieces>VerticalLayoutBox:COMBATSKILL_Layout</Pieces>
+	</Screen>
+</XML>

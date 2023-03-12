@@ -1,0 +1,161 @@
+* { /* This is a game, not a document.  If I want them I'll explicitly add them! */
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+div {
+	overflow: hidden;
+}
+
+div .gauge {
+	position: absolute;
+	line-height: 0;
+	font-size: 0;
+}
+
+div .gauge .piece {
+	display: inline-block;
+	position: relative;
+}
+
+div .gauge .bar {
+	position: absolute;
+	top: 0px;
+}
+
+div .frame {
+	position: absolute;
+	line-height: 0;
+}
+
+div .frame .section {
+	display: inline-block;
+	font-size: 0;
+	position: relative;
+}
+
+div .frame .section .piece {
+	display: inline-block;
+	position: relative;
+}
+
+div .frame .section .vpiece {
+	display: block;
+	position: relative;
+}
+
+div .label {
+	display: inline-block;
+	/* position: absolute; */
+	font-family: Arial, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	text-shadow: 0px -1px 3px rgba(0, 0, 0, 1.0);
+	width: 100%;
+}
+
+div .piece {
+	display: inline-block;
+	position: relative;
+	font-size: 0;
+	line-height: normal;
+}
+#preload {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: -1;
+	width: 1px;
+	height: 1px;
+}
+#editorArea {
+	background-color: black;
+	display: grid;
+	grid-template-columns: 1fr 1fr 6fr;
+	position: absolute;
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	max-height: 100%;
+}
+#fileTree {
+	color: white;
+	border: 2px solid wheat;
+	background: olive;
+	overflow: auto;
+}
+#fileTree > .inlineChildren > .header {
+	display: inline;
+}
+#fileTree .fileElementsContainer {
+	padding-left: 10px;
+}
+#fileTree .fileElementsContainer .fileElementsList {
+	padding-left: 10px;
+}
+#elementProperties {
+	color: white;
+	border: 2px solid wheat;
+	background: olive;
+	overflow: auto;
+}
+#renderView {
+	height: 100%;
+	position: relative;
+	z-index: 1;
+	overflow: auto;
+}
+
+.windowFrame {
+	display: grid;
+	/* grid-auto-columns: auto; */
+	/* grid-auto-rows: auto; */
+	grid-template-areas:
+	"tl t tr"
+	"lt m rt"
+	"l  m r"
+	"lb m rb"
+	"bl b br";
+	/* grid-column-gap: 0; */
+	/* grid-row-gap:  0; */
+}
+.windowFrame #top-left {
+	grid-area: tl;
+}
+.windowFrame #top {
+	grid-area: t;
+}
+.windowFrame #top-right {
+	grid-area: tr;
+}
+.windowFrame #left-top {
+	grid-area: lt;
+}
+.windowFrame #left {
+	grid-area: l;
+}
+.windowFrame #left-bottom {
+	grid-area: lb;
+}
+.windowFrame #middle {
+	grid-area: m;
+}
+.windowFrame #right-top {
+	grid-area: rt;
+}
+.windowFrame #right {
+	grid-area: r;
+}
+.windowFrame #right-bottom {
+	grid-area: rb;
+}
+.windowFrame #bottom-left {
+	grid-area: bl;
+}
+.windowFrame #bottom {
+	grid-area: b;
+}
+.windowFrame #bottom-right {
+	grid-area: br;
+}

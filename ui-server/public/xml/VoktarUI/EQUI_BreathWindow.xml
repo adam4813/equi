@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+	<Gauge item="BREATH_Gauge">
+		<ScreenID>Gauge</ScreenID>
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<Location>
+<!--MODIFY-->		<X>0</X>
+<!--MODIFY-->		<Y>0</Y>
+		</Location>
+		<Size>
+<!--MODIFY-->		<CX>166</CX>
+<!--MODIFY-->		<CY>16</CY>
+		</Size>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+		<FillTint>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>8</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GaugeBackground</Background>
+			<Fill>A_GaugeFill</Fill>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+			<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>
+			<EndCapRight>A_GaugeEndCapRight</EndCapRight>
+		</GaugeDrawTemplate>
+	</Gauge>
+
+<!--ADD-->	<Label item="AirRemaining_Label">
+<!--ADD-->		<ScreenID>AirRemaining_Label</ScreenID>
+<!--ADD-->		<Font>2</Font>
+<!--ADD-->		<RelativePosition>true</RelativePosition>
+<!--ADD-->		<AutoStretch>true</AutoStretch>
+<!--ADD-->		<BottomAnchorToTop>false</BottomAnchorToTop>
+<!--ADD-->		<RightAnchorToLeft>false</RightAnchorToLeft>
+<!--ADD-->		<LeftAnchorOffset>5</LeftAnchorOffset>
+<!--ADD-->		<RightAnchorOffset>5</RightAnchorOffset>
+<!--ADD-->		<TopAnchorOffset>0</TopAnchorOffset>
+<!--ADD-->		<Text>Air Remaining</Text>
+<!--ADD-->		<TextColor>
+<!--ADD-->			<R>255</R>
+<!--ADD-->			<G>255</G>
+<!--ADD-->			<B>255</B>
+<!--ADD-->		</TextColor>
+<!--ADD-->		<NoWrap>true</NoWrap>
+<!--ADD-->		<AlignCenter>true</AlignCenter>
+<!--ADD-->	</Label>
+
+	<Screen item="BreathWindow">
+		<!--<ScreenID/>-->
+		<!--<Font/>-->
+		<RelativePosition>false</RelativePosition>
+		<Location>
+			<X>154</X>
+			<Y>50</Y>
+		</Location>
+		<Size>
+<!--MODIFY-->		<CX>168</CX>
+<!--MODIFY-->		<CY>18</CY>
+		</Size>
+		<Text>Air Remaining</Text>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<TooltipReference>The Breath Meter</TooltipReference>
+		<DrawTemplate>WDT_Rounded</DrawTemplate>
+<!--MODIFY-->	<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>true</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Escapable>false</Escapable>
+		<Pieces>BREATH_Gauge</Pieces>
+<!--ADD-->	<Pieces>AirRemaining_Label</Pieces>
+	</Screen>
+</XML>
